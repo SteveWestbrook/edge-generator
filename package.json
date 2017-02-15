@@ -1,0 +1,12 @@
+{
+  "name": "edge-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "Steven Westbrook <StevenAWestbrook@gmail.com>",
+  "license": "MIT"
+}

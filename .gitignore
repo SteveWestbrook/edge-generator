@@ -1,0 +1,8 @@
+node_modules/
+junk/
+plato/
+notes
+*.dll
+*.exe
+*.mdb
+*.sw*
