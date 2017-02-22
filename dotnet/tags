@@ -1,0 +1,172 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AppendArgumentConversion	DotNetEmitter.cs	/^    private bool AppendArgumentConversion(ParameterInfo info)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+AppendArgumentConversion	JavaScriptEmitter.cs	/^    private void AppendArgumentConversion(ParameterInfo argument) $/;"	m	class:EdgeReference.JavaScriptEmitter	file:	access:private
+AppendArgumentConversions	JavaScriptEmitter.cs	/^    private void AppendArgumentConversions(MethodInfo source)$/;"	m	class:EdgeReference.JavaScriptEmitter	file:	access:private
+AppendBasicRequires	JavaScriptEmitter.cs	/^    public void AppendBasicRequires(Type target) $/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendBasicRequiresTest	EdgeReference.Test/DotNetEmitterTest.cs	/^		public void AppendBasicRequiresTest() {$/;"	m	class:EdgeReference.Test.DotNetEmitterTest	access:public
+AppendBasicRequiresTest	EdgeReference.Test/JavaScriptEmitterTest.cs	/^		public void AppendBasicRequiresTest() {$/;"	m	class:EdgeReference.Test.JavaScriptEmitterTest	access:public
+AppendBreak	JavaScriptEmitter.cs	/^    public void AppendBreak() {$/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendClassDefinition	JavaScriptEmitter.cs	/^    public void AppendClassDefinition(Type target) $/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendClassEnd	DotNetEmitter.cs	/^    public void AppendClassEnd()$/;"	m	class:EdgeReference.DotNetEmitter	access:public
+AppendClassStart	DotNetEmitter.cs	/^    public void AppendClassStart() $/;"	m	class:EdgeReference.DotNetEmitter	access:public
+AppendClassTermination	JavaScriptEmitter.cs	/^    public void AppendClassTermination()$/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendConvertAndReturn	DotNetEmitter.cs	/^    private void AppendConvertAndReturn(Type returnType)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+AppendFunction	DotNetEmitter.cs	/^    public void AppendFunction(MethodInfo info)$/;"	m	class:EdgeReference.DotNetEmitter	access:public
+AppendFunction	JavaScriptEmitter.cs	/^    public void AppendFunction(MethodInfo source, bool isStatic) {$/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendFunctionWithComplexResultAndComplexArgumentTest	EdgeReference.Test/DotNetEmitterTest.cs	/^		public void AppendFunctionWithComplexResultAndComplexArgumentTest() {$/;"	m	class:EdgeReference.Test.DotNetEmitterTest	access:public
+AppendFunctionWithComplexResultAndComplexArgumentTest	EdgeReference.Test/JavaScriptEmitterTest.cs	/^		public void AppendFunctionWithComplexResultAndComplexArgumentTest() {$/;"	m	class:EdgeReference.Test.JavaScriptEmitterTest	access:public
+AppendGetter	DotNetEmitter.cs	/^    private void AppendGetter(PropertyInfo info, bool isStatic)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+AppendLine	JavaScriptEmitter.cs	/^    public void AppendLine() {$/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendNamespace	DotNetEmitter.cs	/^    public void AppendNamespace()$/;"	m	class:EdgeReference.DotNetEmitter	access:public
+AppendNamespaceEnd	DotNetEmitter.cs	/^    public void AppendNamespaceEnd() $/;"	m	class:EdgeReference.DotNetEmitter	access:public
+AppendProperty	DotNetEmitter.cs	/^    public void AppendProperty(PropertyInfo info)$/;"	m	class:EdgeReference.DotNetEmitter	access:public
+AppendProperty	JavaScriptEmitter.cs	/^    public void AppendProperty(PropertyInfo source, bool isStatic)$/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendReference	ProxyGenerator.old.cs	/^		private void AppendReference(string name, string file)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+AppendReferenceFooter	JavaScriptEmitter.cs	/^    public void AppendReferenceFooter()$/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendReferenceFor	DotNetEmitter.cs	/^    public void AppendReferenceFor(Type type)$/;"	m	class:EdgeReference.DotNetEmitter	access:public
+AppendReferenceHeader	JavaScriptEmitter.cs	/^    public void AppendReferenceHeader() $/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendRequire	JavaScriptEmitter.cs	/^    private void AppendRequire(Type type) {$/;"	m	class:EdgeReference.JavaScriptEmitter	file:	access:private
+AppendRequire	JavaScriptEmitter.cs	/^    private void AppendRequire(string name, string file)$/;"	m	class:EdgeReference.JavaScriptEmitter	file:	access:private
+AppendRequires	JavaScriptEmitter.cs	/^    public void AppendRequires(IEnumerable<Type> referenceTypes) {$/;"	m	class:EdgeReference.JavaScriptEmitter	access:public
+AppendSetter	DotNetEmitter.cs	/^    private void AppendSetter(PropertyInfo info, bool isStatic)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+AppendUsingFor	DotNetEmitter.cs	/^    public void AppendUsingFor(Type type)$/;"	m	class:EdgeReference.DotNetEmitter	access:public
+Arguments	FunctionDefinition.cs	/^		public Dictionary<string, ProxyDefinition> Arguments {$/;"	p	class:EdgeReference.FunctionDefinition	access:public
+Buffer	CodeEmitter.cs	/^		public StringBuilder Buffer$/;"	p	class:EdgeReference.CodeEmitter	access:public
+Child	DotNetTest/TestType1.cs	/^		public TestType2 Child { get; private set; }$/;"	p	class:DotNetTest.TestType1	access:public
+CodeEmitter	CodeEmitter.cs	/^		public CodeEmitter()$/;"	m	class:EdgeReference.CodeEmitter	access:public
+CodeEmitter	CodeEmitter.cs	/^	public class CodeEmitter$/;"	c	namespace:EdgeReference	access:public
+ConvertFullName	ReflectionUtils.cs	/^    public static string ConvertFullName(string fullName) {$/;"	m	class:EdgeReference.ReflectionUtils	access:public
+CreateNewT2	DotNetTest/TestType1.cs	/^		public TestType2 CreateNewT2(TestType2 template, string description)$/;"	m	class:DotNetTest.TestType1	access:public
+CreateType2	Sample.cs	/^    public static int CreateType2($/;"	m	class:EdgeReference.DotNetTest.Type1Proxy	access:public
+CurrentIndent	CodeEmitter.cs	/^    protected string CurrentIndent $/;"	p	class:EdgeReference.CodeEmitter	access:protected
+CurrentIndent	ProxyGenerator.old.cs	/^		private string CurrentIndent $/;"	p	class:EdgeReference.ProxyGenerator	access:private
+DefaultIndentWidth	CodeEmitter.cs	/^		protected const int DefaultIndentWidth = 4;$/;"	f	class:EdgeReference.CodeEmitter	access:protected
+DefaultIndentWidth	JavaScriptEmitter.cs	/^    private const int DefaultIndentWidth = 2;$/;"	f	class:EdgeReference.JavaScriptEmitter	file:	access:private
+DefaultIndentWidth	ProxyGenerator.old.cs	/^		private const int DefaultIndentWidth = 2;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+Description	DotNetTest/TestType2.cs	/^		public string Description {get; set;}$/;"	p	class:DotNetTest.TestType2	access:public
+DetermineJavaScriptTypeName	JavaScriptEmitter.cs	/^    private string DetermineJavaScriptTypeName(Type type) {$/;"	m	class:EdgeReference.JavaScriptEmitter	file:	access:private
+DetermineTypeModifier	ProxyGenerator.old.cs	/^		private string DetermineTypeModifier(Type type)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+DotNetEmitter	DotNetEmitter.cs	/^    public DotNetEmitter(Type source, StringBuilder existingBuffer = null)$/;"	m	class:EdgeReference.DotNetEmitter	access:public
+DotNetEmitter	DotNetEmitter.cs	/^  public class DotNetEmitter : CodeEmitter$/;"	c	namespace:EdgeReference	access:public
+DotNetEmitterTest	EdgeReference.Test/DotNetEmitterTest.cs	/^		public DotNetEmitterTest()$/;"	m	class:EdgeReference.Test.DotNetEmitterTest	access:public
+DotNetEmitterTest	EdgeReference.Test/DotNetEmitterTest.cs	/^	public class DotNetEmitterTest$/;"	c	namespace:EdgeReference.Test	access:public
+DotNetTest	DotNetTest/TestType1.cs	/^namespace DotNetTest$/;"	n
+DotNetTest	DotNetTest/TestType2.cs	/^namespace DotNetTest$/;"	n
+EdgeModuleName	JavaScriptEmitter.cs	/^    public const string EdgeModuleName = "edge";$/;"	f	class:EdgeReference.JavaScriptEmitter	access:public
+EdgeReference	CodeEmitter.cs	/^namespace EdgeReference$/;"	n
+EdgeReference	DotNetEmitter.cs	/^namespace EdgeReference$/;"	n
+EdgeReference	FunctionDefinition.cs	/^namespace EdgeReference$/;"	n
+EdgeReference	JavaScriptEmitter.cs	/^namespace EdgeReference$/;"	n
+EdgeReference	ProxyDefinition.cs	/^namespace EdgeReference$/;"	n
+EdgeReference	ProxyGenerator.cs	/^namespace EdgeReference$/;"	n
+EdgeReference	ProxyGenerator.old.cs	/^namespace EdgeReference$/;"	n
+EdgeReference	ReferenceManager.cs	/^namespace EdgeReference$/;"	n
+EdgeReference	ReflectionUtils.cs	/^namespace EdgeReference$/;"	n
+EdgeReference	Template.cs	/^namespace EdgeReference$/;"	n
+EdgeReference.DotNetTest	Sample.cs	/^namespace EdgeReference.DotNetTest$/;"	n
+EdgeReference.Test	EdgeReference.Test/DotNetEmitterTest.cs	/^namespace EdgeReference.Test$/;"	n
+EdgeReference.Test	EdgeReference.Test/JavaScriptEmitterTest.cs	/^namespace EdgeReference.Test$/;"	n
+EdgeReferenceModuleName	JavaScriptEmitter.cs	/^    public const string EdgeReferenceModuleName = "edge-reference";$/;"	f	class:EdgeReference.JavaScriptEmitter	access:public
+EdgeReferenceModuleName	ProxyGenerator.old.cs	/^		public const string EdgeReferenceModuleName = "edge-reference";$/;"	f	class:EdgeReference.ProxyGenerator	access:public
+EdgeReferenceTest	EdgeReferenceTest/MyClass.cs	/^namespace EdgeReferenceTest$/;"	n
+EdgeReferenceTypeName	JavaScriptEmitter.cs	/^    public const string EdgeReferenceTypeName = "EdgeReference";$/;"	f	class:EdgeReference.JavaScriptEmitter	access:public
+EdgeReferenceTypeName	ProxyGenerator.old.cs	/^		public const string EdgeReferenceTypeName = "EdgeReference";$/;"	f	class:EdgeReference.ProxyGenerator	access:public
+EdgeTypeName	JavaScriptEmitter.cs	/^    public const string EdgeTypeName = "edge";$/;"	f	class:EdgeReference.JavaScriptEmitter	access:public
+EnsureReference	ReferenceManager.cs	/^    public int EnsureReference(object reference)$/;"	m	class:EdgeReference.ReferenceManager	access:public
+FunctionDefinition	FunctionDefinition.cs	/^		public FunctionDefinition ()$/;"	m	class:EdgeReference.FunctionDefinition	access:public
+FunctionDefinition	FunctionDefinition.cs	/^	public class FunctionDefinition : ProxyDefinition$/;"	c	namespace:EdgeReference	access:public
+Functions	ProxyDefinition.cs	/^		public Dictionary<string, FunctionDefinition> Functions {$/;"	p	class:EdgeReference.ProxyDefinition	access:public
+Generate	ProxyGenerator.cs	/^    private void Generate(Type target)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+Generate	ProxyGenerator.cs	/^    public static void Generate($/;"	m	class:EdgeReference.ProxyGenerator	access:public
+Generate	ProxyGenerator.old.cs	/^		private void Generate(Type target)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+Generate	ProxyGenerator.old.cs	/^		public static void Generate($/;"	m	class:EdgeReference.ProxyGenerator	access:public
+GenerateArgumentConversion	DotNetEmitter.cs	/^    private string GenerateArgumentConversion($/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+GenerateCallArgumentsList	DotNetEmitter.cs	/^    private string GenerateCallArgumentsList(ParameterInfo[] parameters)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+GenerateCallLine	DotNetEmitter.cs	/^    private string GenerateCallLine(MethodInfo info)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+GenerateClassDefinition	ProxyGenerator.old.cs	/^		private void GenerateClassDefinition(Type target) $/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+GenerateClassTermination	ProxyGenerator.old.cs	/^		private void GenerateClassTermination()$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+GenerateFunction	ProxyGenerator.old.cs	/^		private void GenerateFunction(MethodInfo source, bool isStatic)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+GenerateFunctionCall	JavaScriptEmitter.cs	/^    private string GenerateFunctionCall($/;"	m	class:EdgeReference.JavaScriptEmitter	file:	access:private
+GenerateFunctionSignature	DotNetEmitter.cs	/^    private string GenerateFunctionSignature(MethodInfo info)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+GenerateGetterBody	JavaScriptEmitter.cs	/^    private string GenerateGetterBody(string name, Type type, bool isStatic) {$/;"	m	class:EdgeReference.JavaScriptEmitter	file:	access:private
+GenerateProperty	ProxyGenerator.old.cs	/^		private void GenerateProperty(PropertyInfo source, bool isStatic)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+GenerateReferenceRetrieval	DotNetEmitter.cs	/^    private string GenerateReferenceRetrieval(string referenceArgumentName)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+GenerateRequires	ProxyGenerator.old.cs	/^		private void GenerateRequires(Type target) $/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+GenerateReturnLine	JavaScriptEmitter.cs	/^    private string GenerateReturnLine(Type returnType) {$/;"	m	class:EdgeReference.JavaScriptEmitter	file:	access:private
+GenerateSetterBody	JavaScriptEmitter.cs	/^    private string GenerateSetterBody(string name, Type type, bool isStatic) {$/;"	m	class:EdgeReference.JavaScriptEmitter	file:	access:private
+GenerateSignatureArgumentsList	DotNetEmitter.cs	/^    private string GenerateSignatureArgumentsList(ParameterInfo[] parameters)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+GetterTemplate	JavaScriptEmitter.cs	/^    private const string GetterTemplate = @"{0}{1}get {2}() {{$/;"	f	class:EdgeReference.JavaScriptEmitter	file:	access:private
+IndentWidth	CodeEmitter.cs	/^    public int IndentWidth $/;"	p	class:EdgeReference.CodeEmitter	access:public
+IndentWidth	ProxyGenerator.old.cs	/^		public int IndentWidth $/;"	p	class:EdgeReference.ProxyGenerator	access:public
+InitializeLifetimeService	ReferenceManager.cs	/^    public override object InitializeLifetimeService ()$/;"	m	class:EdgeReference.ReferenceManager	access:public
+Instance	ReferenceManager.cs	/^    public static ReferenceManager Instance {$/;"	p	class:EdgeReference.ReferenceManager	access:public
+IsReferenceType	ReflectionUtils.cs	/^    public static bool IsReferenceType(Type type) {$/;"	m	class:EdgeReference.ReflectionUtils	access:public
+JavaScriptEmitter	JavaScriptEmitter.cs	/^  public class JavaScriptEmitter : CodeEmitter$/;"	c	namespace:EdgeReference	access:public
+JavaScriptEmitterTest	EdgeReference.Test/JavaScriptEmitterTest.cs	/^		public JavaScriptEmitterTest()$/;"	m	class:EdgeReference.Test.JavaScriptEmitterTest	access:public
+JavaScriptEmitterTest	EdgeReference.Test/JavaScriptEmitterTest.cs	/^	public class JavaScriptEmitterTest$/;"	c	namespace:EdgeReference.Test	access:public
+JavaScriptFriendlyType	DotNetEmitter.cs	/^    private string JavaScriptFriendlyType(Type type)$/;"	m	class:EdgeReference.DotNetEmitter	file:	access:private
+MemberSeparator	ProxyGenerator.old.cs	/^		private static readonly string MemberSeparator = Environment.NewLine + Environment.NewLine;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+MyClass	EdgeReferenceTest/MyClass.cs	/^		public MyClass ()$/;"	m	class:EdgeReferenceTest.MyClass	access:public
+MyClass	EdgeReferenceTest/MyClass.cs	/^	public class MyClass$/;"	c	namespace:EdgeReferenceTest	access:public
+Name	DotNetTest/TestType1.cs	/^		public string Name { get; set; }$/;"	p	class:DotNetTest.TestType1	access:public
+Name	FunctionDefinition.cs	/^		public string Name {$/;"	p	class:EdgeReference.FunctionDefinition	access:public
+OnClassGenerated	ProxyGenerator.cs	/^    private void OnClassGenerated(Type classType, string generatedJavaScript)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+OnClassGenerated	ProxyGenerator.old.cs	/^		private void OnClassGenerated(Type classType, string generatedJavaScript)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+Properties	ProxyDefinition.cs	/^		public Dictionary<string, ProxyDefinition> Properties {$/;"	p	class:EdgeReference.ProxyDefinition	access:public
+ProxyDefinition	ProxyDefinition.cs	/^		public ProxyDefinition ()$/;"	m	class:EdgeReference.ProxyDefinition	access:public
+ProxyDefinition	ProxyDefinition.cs	/^	public class ProxyDefinition$/;"	c	namespace:EdgeReference	access:public
+ProxyGenerator	ProxyGenerator.cs	/^    protected ProxyGenerator ()$/;"	m	class:EdgeReference.ProxyGenerator	access:protected
+ProxyGenerator	ProxyGenerator.cs	/^  public class ProxyGenerator$/;"	c	namespace:EdgeReference	access:public
+ProxyGenerator	ProxyGenerator.old.cs	/^		protected ProxyGenerator ()$/;"	m	class:EdgeReference.ProxyGenerator	access:protected
+ProxyGenerator	ProxyGenerator.old.cs	/^	public class ProxyGenerator$/;"	c	namespace:EdgeReference	access:public
+PullReference	ReferenceManager.cs	/^    public object PullReference(int id)$/;"	m	class:EdgeReference.ReferenceManager	access:public
+ReferenceManager	ReferenceManager.cs	/^    protected ReferenceManager()$/;"	m	class:EdgeReference.ReferenceManager	access:protected
+ReferenceManager	ReferenceManager.cs	/^  public class ReferenceManager : MarshalByRefObject$/;"	c	namespace:EdgeReference	access:public
+ReflectionUtils	ReflectionUtils.cs	/^	public class ReflectionUtils$/;"	c	namespace:EdgeReference	access:public
+RetrieveMethods	ProxyGenerator.cs	/^    private MethodInfo[] RetrieveMethods(Type target, BindingFlags flags)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+RetrieveMethods	ProxyGenerator.old.cs	/^		private MethodInfo[] RetrieveMethods(Type target, BindingFlags flags)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+RetrieveProperties	ProxyGenerator.cs	/^    private PropertyInfo[] RetrieveProperties(Type target, BindingFlags flags)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+RetrieveProperties	ProxyGenerator.old.cs	/^		private PropertyInfo[] RetrieveProperties(Type target, BindingFlags flags)$/;"	m	class:EdgeReference.ProxyGenerator	file:	access:private
+ReturnType	FunctionDefinition.cs	/^		public ProxyDefinition ReturnType {$/;"	p	class:EdgeReference.FunctionDefinition	access:public
+SetterTemplate	JavaScriptEmitter.cs	/^    private const string SetterTemplate = @"{0}{1}set {2}(value) {{$/;"	f	class:EdgeReference.JavaScriptEmitter	file:	access:private
+Status	DotNetTest/TestType2.cs	/^		public int Status {get; set;}$/;"	p	class:DotNetTest.TestType2	access:public
+Template	Template.cs	/^		public Template ()$/;"	m	class:EdgeReference.Template	access:public
+Template	Template.cs	/^	public class Template$/;"	c	namespace:EdgeReference	access:public
+TestType1	DotNetTest/TestType1.cs	/^		public TestType1()$/;"	m	class:DotNetTest.TestType1	access:public
+TestType1	DotNetTest/TestType1.cs	/^	public class TestType1$/;"	c	namespace:DotNetTest	access:public
+TestType2	DotNetTest/TestType2.cs	/^		public TestType2 ()$/;"	m	class:DotNetTest.TestType2	access:public
+TestType2	DotNetTest/TestType2.cs	/^	public class TestType2$/;"	c	namespace:DotNetTest	access:public
+ToString	CodeEmitter.cs	/^    public override string ToString() $/;"	m	class:EdgeReference.CodeEmitter	access:public
+Type1Proxy	Sample.cs	/^  public static class Type1Proxy$/;"	c	namespace:EdgeReference.DotNetTest	access:public
+TypeName	ProxyDefinition.cs	/^		public string TypeName {$/;"	p	class:EdgeReference.ProxyDefinition	access:public
+appended	JavaScriptEmitter.cs	/^  private Dictionary<string, bool> appended = new Dictionary<string, bool>();$/;"	f	class:EdgeReference.JavaScriptEmitter	file:	access:private
+buffer	CodeEmitter.cs	/^		protected StringBuilder buffer;$/;"	f	class:EdgeReference.CodeEmitter	access:protected
+buffer	ProxyGenerator.old.cs	/^		private StringBuilder buffer;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+classGenerated	ProxyGenerator.cs	/^    private Action<string, string> classGenerated;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+classGenerated	ProxyGenerator.old.cs	/^		private Action<string, string> classGenerated;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+currentIndentWidth	CodeEmitter.cs	/^    protected int currentIndentWidth;$/;"	f	class:EdgeReference.CodeEmitter	access:protected
+currentIndentWidth	ProxyGenerator.old.cs	/^		private int currentIndentWidth;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+dotNetEmitter	ProxyGenerator.cs	/^    private DotNetEmitter dotNetEmitter;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+emitter	ProxyGenerator.cs	/^    private JavaScriptEmitter emitter;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+generatedMembers	ProxyGenerator.cs	/^    private Dictionary<string, List<MemberInfo>> generatedMembers;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+generatedMembers	ProxyGenerator.old.cs	/^		private Dictionary<string, List<MemberInfo>> generatedMembers;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+generatedProxies	ProxyGenerator.cs	/^    private static ConcurrentDictionary<string, string> generatedProxies = new ConcurrentDictionary<string, string>();$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+generatedProxies	ProxyGenerator.old.cs	/^		private static ConcurrentDictionary<string, string> generatedProxies = new ConcurrentDictionary<string, string>();$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+idsByReference	ReferenceManager.cs	/^    public Dictionary<object, int> idsByReference { get; private set; }$/;"	p	class:EdgeReference.ReferenceManager	access:public
+incrementalIndent	CodeEmitter.cs	/^    protected string incrementalIndent;$/;"	f	class:EdgeReference.CodeEmitter	access:protected
+incrementalIndent	ProxyGenerator.old.cs	/^		private string incrementalIndent;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+instance	ReferenceManager.cs	/^    private static ReferenceManager instance;$/;"	f	class:EdgeReference.ReferenceManager	file:	access:private
+instanceLock	ReferenceManager.cs	/^    private static object instanceLock = new object();$/;"	f	class:EdgeReference.ReferenceManager	file:	access:private
+javaScriptClassName	JavaScriptEmitter.cs	/^    private string javaScriptClassName;$/;"	f	class:EdgeReference.JavaScriptEmitter	file:	access:private
+javaScriptClassName	ProxyGenerator.old.cs	/^		private string javaScriptClassName;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+javaScriptFullName	JavaScriptEmitter.cs	/^    private string javaScriptFullName;$/;"	f	class:EdgeReference.JavaScriptEmitter	file:	access:private
+javaScriptFullName	ProxyGenerator.old.cs	/^		private string javaScriptFullName;$/;"	f	class:EdgeReference.ProxyGenerator	file:	access:private
+nextTemplateId	ReferenceManager.cs	/^    private volatile int nextTemplateId = 0;$/;"	f	class:EdgeReference.ReferenceManager	file:	access:private
+referencedTypes	DotNetEmitter.cs	/^    private Dictionary<string, bool> referencedTypes;$/;"	f	class:EdgeReference.DotNetEmitter	file:	access:private
+referencesById	ReferenceManager.cs	/^    public Dictionary<int, object> referencesById { get; private set; }$/;"	p	class:EdgeReference.ReferenceManager	access:public
+source	DotNetEmitter.cs	/^    private Type source;$/;"	f	class:EdgeReference.DotNetEmitter	file:	access:private

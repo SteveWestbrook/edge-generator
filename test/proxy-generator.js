@@ -6,7 +6,14 @@ describe('generator', () => {
     it('should successfully generate a proxy for a .NET assembly', (done) => {      
       generator.generate(
         'DotNetTest.TestType1',
-        path.join(__dirname, 'DotNetTest.dll'),
+        path.resolve(
+          __dirname,
+          '..',
+          'dotnet',
+          'DotNetTest',
+          'bin',
+          'Debug',
+          'DotNetTest.dll'),
         path.resolve(__dirname, '../junk'),
         done);
     });

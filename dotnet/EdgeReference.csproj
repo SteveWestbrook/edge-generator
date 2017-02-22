@@ -33,7 +33,6 @@
     <Reference Include="System.Core" />
     <Reference Include="nunit.core, Version=2.6.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Private>False</Private>
-      <Package>nunit</Package>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +41,8 @@
     <Compile Include="ReferenceManager.cs" />
     <Compile Include="JavaScriptEmitter.cs" />
     <Compile Include="ReflectionUtils.cs" />
+    <Compile Include="DotNetEmitter.cs" />
+    <Compile Include="CodeEmitter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

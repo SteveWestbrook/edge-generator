@@ -8,7 +8,7 @@ using System.Collections.Concurrent;
 
 namespace EdgeReference
 {
-  public class JavaScriptEmitter
+  public class JavaScriptEmitter : CodeEmitter
   {
     public const string EdgeTypeName = "edge";
 
@@ -40,15 +40,7 @@ namespace EdgeReference
 {3}
 {0}}}";
 
-    private const int DefaultIndentWidth = 2;
-
-    private StringBuilder buffer;
-
-    private int currentIndentWidth;
-
-    private string incrementalIndent;
-	
-	private Dictionary<string, bool> appended = new Dictionary<string, bool>();
+  private Dictionary<string, bool> appended = new Dictionary<string, bool>();
 
     /// <summary>
     /// The name of the JavaScript class.
@@ -61,36 +53,19 @@ namespace EdgeReference
     /// </summary>
     private string javaScriptFullName;
 
-    public JavaScriptEmitter() {
-      this.IndentWidth = DefaultIndentWidth;
-			this.buffer = new StringBuilder();
-    }
+    #region .Net Wrapping
 
-    public int IndentWidth 
+    public void AppendReferenceHeader() 
     {
-      get 
-      {
-        return this.incrementalIndent.Length;
-      }
-
-      set
-      {
-        this.incrementalIndent = new string (' ', value);
-      }
+      this.buffer.AppendLine("const Reference = edge(function () { /*");
     }
 
-    private string CurrentIndent 
-    { 
-      get 
-      {
-        return new string(' ', this.currentIndentWidth);
-      }
-    }
-
-    public override string ToString() 
+    public void AppendReferenceFooter()
     {
-      return this.buffer.ToString();
+      this.buffer.AppendLine("*/}));");
     }
+
+    #endregion
 
     #region Requires
 
@@ -110,11 +85,11 @@ namespace EdgeReference
     public void AppendRequires(IEnumerable<Type> referenceTypes) {
 
       foreach (Type type in referenceTypes) {
-				if (!this.appended.ContainsKey(type.Name)
-				    && ReflectionUtils.IsReferenceType(type)) {
-					this.appended.Add(type.Name, true);
-					this.AppendRequire(type);        
-				}
+        if (!this.appended.ContainsKey(type.Name)
+            && ReflectionUtils.IsReferenceType(type)) {
+          this.appended.Add(type.Name, true);
+          this.AppendRequire(type);        
+        }
       }
     }
 
@@ -172,13 +147,13 @@ namespace EdgeReference
       this.buffer.AppendLine();
 
       // Add indent for future declarations
-      this.currentIndentWidth += this.IndentWidth;
+      this.Indent();
     }
 
     public void AppendClassTermination()
     {
       // Outdent
-      this.currentIndentWidth -= this.IndentWidth;
+      this.Outdent();
 
       buffer.Append(this.CurrentIndent);
       buffer.AppendLine("}");
@@ -189,7 +164,8 @@ namespace EdgeReference
     #region Properties
 
     /// <summary>
-    /// Generates and appends a JavaScript property to the ProxyGenerator's internal buffer.
+    /// Generates and appends a JavaScript property to the ProxyGenerator's 
+    /// internal buffer.
     /// </summary>
     /// <param name="source">
     /// Information about the property to be generated.
@@ -198,8 +174,8 @@ namespace EdgeReference
     /// If set to <c>true</c>, the member is static.
     /// </param>
     /// <remarks>
-    /// The property info provided could be used to determine whether the member 
-    /// is static; however a parameter is more convenient.
+    /// The property info provided could be used to determine whether the 
+    /// member is static; however a parameter is more convenient.
     /// </remarks>
     public void AppendProperty(PropertyInfo source, bool isStatic)
     {
@@ -227,8 +203,8 @@ namespace EdgeReference
       };
 
       // used twice
-			MethodInfo setter = source.GetSetMethod();
-			MethodInfo getter = source.GetGetMethod();
+      MethodInfo setter = source.GetSetMethod();
+      MethodInfo getter = source.GetGetMethod();
       bool canWrite = source.CanWrite && setter != null && setter.IsPublic;
 
       // Note that public properties are defined as properties with a 
@@ -238,7 +214,7 @@ namespace EdgeReference
         formatAccessor(GetterTemplate, getterBody);
 
         if (canWrite) {
-					this.AppendBreak ();
+          this.AppendBreak ();
         }
       }
 
@@ -253,7 +229,7 @@ namespace EdgeReference
       if (ReflectionUtils.IsReferenceType(type)) {
         result = string.Format(
           CultureInfo.InvariantCulture,
-          @"{0}{1}var returnId = Reference.{2}({3});
+          @"{0}{1}var returnId = Reference.Get_{2}({3});
 {0}{1}return new {4}(returnId);",
           this.CurrentIndent,
           this.incrementalIndent,
@@ -263,9 +239,9 @@ namespace EdgeReference
       } else {
         result = string.Format(
           CultureInfo.InvariantCulture,
-					"{0}{1}return Reference.{2}({3});",
-					this.CurrentIndent,
-					this.incrementalIndent,
+          "{0}{1}return Reference.Get_{2}({3});",
+          this.CurrentIndent,
+          this.incrementalIndent,
           name,
           isStatic ? string.Empty : "this._referenceId");
       }
@@ -276,10 +252,11 @@ namespace EdgeReference
     private string GenerateSetterBody(string name, Type type, bool isStatic) {
       string result;
 
+      // TODO: Here, only one parameter can be provided.
       if (ReflectionUtils.IsReferenceType(type)) {
         result = string.Format(
           CultureInfo.InvariantCulture,
-          "{0}{1}Reference.{2}({3}value._edgeId));",
+          "{0}{1}Reference.Set_{2}({3}value._edgeId));",
           this.CurrentIndent,
           this.incrementalIndent,
           name,
@@ -287,7 +264,7 @@ namespace EdgeReference
       } else {
         result = string.Format(
           CultureInfo.InvariantCulture,
-          "{0}{1}Reference.{2}({3}value));",
+          "{0}{1}Reference.Set_{2}({3}value));",
           this.CurrentIndent,
           this.incrementalIndent,
           name,
@@ -301,10 +278,11 @@ namespace EdgeReference
 
     #region Functions
 
-    public void AppendFunction(MethodInfo source, bool isStatic) {
-
+    public void AppendFunction(MethodInfo source, bool isStatic) 
+    {
       // Build argument name references
-      string[] argumentNames = source.GetParameters()
+      ParameterInfo[] arguments = source.GetParameters();
+      string[] argumentNames = arguments
         .Select((parameter) => {
           return parameter.Name;
         })
@@ -312,39 +290,42 @@ namespace EdgeReference
 
       string argumentNameList = string.Join(", ", argumentNames);
 
-			const string SignatureTemplate = 
-				"{0}{1}({2}) {{";
+      const string SignatureTemplate = 
+        "{0}{1}({2}) {{";
 
-			this.buffer.AppendFormat (
-				CultureInfo.InvariantCulture,
-				SignatureTemplate,
-				this.CurrentIndent,
-				source.Name,
-				argumentNameList);
+      this.buffer.AppendFormat( 
+        CultureInfo.InvariantCulture,
+        SignatureTemplate,
+        this.CurrentIndent,
+        source.Name,
+        argumentNameList);
 
-			this.buffer.AppendLine();
-			// Indent
-      this.currentIndentWidth += this.IndentWidth;
+      this.buffer.AppendLine();
+      // Indent
+      this.Indent();
 
       // Append argument conversions
       this.AppendArgumentConversions(source);
+
+			this.buffer.AppendLine();
+			this.buffer.AppendLine();
 
       // Append call line
       this.buffer.AppendLine(GenerateFunctionCall(
         source,
         isStatic,
-        argumentNameList));
+        arguments));
 
       // Append return line
       this.buffer.AppendLine(GenerateReturnLine(source.ReturnType));
 
       // Outdent
-      this.currentIndentWidth -= this.IndentWidth;
+      this.Outdent();
 
-			this.buffer.AppendFormat (
-				CultureInfo.InvariantCulture,
-				"{0}}}",
-				this.CurrentIndent);
+      this.buffer.AppendFormat (
+        CultureInfo.InvariantCulture,
+        "{0}}}",
+        this.CurrentIndent);
     }
 
     private void AppendArgumentConversions(MethodInfo source)
@@ -363,6 +344,7 @@ namespace EdgeReference
         this.buffer.AppendFormat(
           CultureInfo.InvariantCulture,
           ArgumentConversionLineTemplate,
+				this.CurrentIndent,
           argument.Name);
       }
     }
@@ -370,24 +352,37 @@ namespace EdgeReference
     private string GenerateFunctionCall(
       MethodInfo source,
       bool isStatic,
-      string argumentNameList)
+      ParameterInfo[] arguments)
     {
 
       const string FunctionCallLineTemplate =
-        "{0}var result = Reference.{1}({2}{3});";
+        "{0}var result = Reference.{1}({2});";
+      
+      string referenceParameter = 
+        isStatic ? 
+        string.Empty :
+        "_referenceId: _referenceId, " + Environment.NewLine;
 
-			string staticReplacement = isStatic ? string.Empty : "this._referenceId";
-			if (argumentNameList.Length > 0) {
-				staticReplacement += ", ";
-			}
+      string argumentObject = string.Concat(
+        "{",
+        referenceParameter,
+        string.Join(
+          "," + Environment.NewLine + this.CurrentIndent,
+          arguments.Select(parameter => {
+            return string.Concat(
+              parameter.Name,
+              ": ",
+              parameter.Name);
+            })
+            .ToArray()),
+        "}");
 
       return string.Format(
         CultureInfo.InvariantCulture,
         FunctionCallLineTemplate,
         this.CurrentIndent,
         source.Name,
-				staticReplacement,
-        argumentNameList);
+        argumentObject);
     }
 
     private string GenerateReturnLine(Type returnType) {
@@ -410,14 +405,14 @@ namespace EdgeReference
 
     #endregion Functions
 
-		public void AppendBreak() {
-			this.buffer.AppendLine();
-			this.buffer.AppendLine();
-		}
+    public void AppendBreak() {
+      this.buffer.AppendLine();
+      this.buffer.AppendLine();
+    }
 
-		public void AppendLine() {
-			this.buffer.AppendLine();
-		}
+    public void AppendLine() {
+      this.buffer.AppendLine();
+    }
 
     /// <summary>
     /// Looks up the JavaScript type name for the specified type.
@@ -426,8 +421,6 @@ namespace EdgeReference
       // TODO: Look up set of stored names here in case of naming conflict
       return type.Name;
     }
-
-
   }
 }
 

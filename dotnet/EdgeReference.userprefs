@@ -1,15 +1,31 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="EdgeReference.Test/JavaScriptEmitterTest.cs">
-    <Files>
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="EdgeReference" expanded="True">
-            <Node name="JavaScriptEmitter.cs" selected="True" />
+          <Node name="DotNetTest" expanded="True">
+            <Node name="TestType1.cs" selected="True" />
           </Node>
+          <Node name="EdgeReference" expanded="True" />
           <Node name="EdgeReference.Test" expanded="True" />
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State expanded="True">
+          <Node name="EdgeReference.Test" expanded="True">
+            <Node name="EdgeReference" expanded="True">
+              <Node name="Test" expanded="True">
+                <Node name="JavaScriptEmitterTest" selected="True" />
+              </Node>
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>

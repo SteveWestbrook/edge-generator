@@ -20,6 +20,8 @@ namespace EdgeReference
 
     private JavaScriptEmitter emitter;
 
+    private DotNetEmitter dotNetEmitter;
+
     protected ProxyGenerator ()
     {
     }
@@ -35,18 +37,19 @@ namespace EdgeReference
       Action<string, string> classGeneratedCallback)
     {
 
-			try {
-      ProxyGenerator generator = new ProxyGenerator ();
-      Assembly owningAssembly = Assembly.ReflectionOnlyLoadFrom (assemblyPath);
-      Type type = owningAssembly.GetType (typeNameWithNamespace);
+      try 
+      {
+        ProxyGenerator generator = new ProxyGenerator ();
+        Assembly owningAssembly = Assembly.ReflectionOnlyLoadFrom (assemblyPath);
+        Type type = owningAssembly.GetType (typeNameWithNamespace);
 
-      generator.classGenerated = classGeneratedCallback;
-      generator.Generate(type);
-			} catch (Exception ex) {
-				Console.WriteLine ("Error during generation: ");
-				Console.WriteLine (ex.ToString ());
-				throw;
-			}
+        generator.classGenerated = classGeneratedCallback;
+        generator.Generate(type);
+      } catch (Exception ex) {
+        Console.WriteLine ("Error during generation: ");
+        Console.WriteLine (ex.ToString ());
+        throw;
+      }
     }
 
     private void Generate(Type target)
@@ -55,22 +58,23 @@ namespace EdgeReference
       // this.javaScriptClassName = target.Name;
       // this.javaScriptFullName = target.FullName.Replace ('.', '-');
       this.emitter = new JavaScriptEmitter();
+      this.dotNetEmitter = new DotNetEmitter(target, this.emitter.Buffer);
 
       PropertyInfo[] staticProperties = RetrieveProperties(target, BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly);
 
-			PropertyInfo[] instanceProperties = RetrieveProperties(target, BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+      PropertyInfo[] instanceProperties = RetrieveProperties(target, BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
 
-			MethodInfo[] staticMethods = this.RetrieveMethods(
-				  target,
-				  BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
-				.Where(info => !info.IsSpecialName)
-				.ToArray();
+      MethodInfo[] staticMethods = this.RetrieveMethods(
+          target,
+          BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)
+        .Where(info => !info.IsSpecialName)
+        .ToArray();
 
-			MethodInfo[] instanceMethods = this.RetrieveMethods(
-				target,
-				BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
-				.Where(info => !info.IsSpecialName)
-				.ToArray();
+      MethodInfo[] instanceMethods = this.RetrieveMethods(
+        target,
+        BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+        .Where(info => !info.IsSpecialName)
+        .ToArray();
 
       this.emitter.AppendBasicRequires(target);
 
@@ -81,12 +85,12 @@ namespace EdgeReference
         .Where(info => ReflectionUtils.IsReferenceType(info.PropertyType))
         .Select(info => info.PropertyType));
 
-		IEnumerable<Type> requireProperties = 
-				staticProperties.Concat (instanceProperties)
-				.Distinct ()
-				.Select ((info) => {
-						return info.PropertyType;
-				});
+    IEnumerable<Type> requireProperties = 
+        staticProperties.Concat (instanceProperties)
+        .Distinct ()
+        .Select ((info) => {
+            return info.PropertyType;
+        });
 
       // Get all non-value, non-string types used by methods.
       IEnumerable<Type> requireMethods = 
@@ -111,31 +115,31 @@ namespace EdgeReference
 
       this.emitter.AppendRequires(requireProperties);
       this.emitter.AppendRequires(requireMethods);
-			this.emitter.AppendLine();
+      this.emitter.AppendLine();
 
       // TODO: Reference component
 
       this.emitter.AppendClassDefinition(target);
 
-      // TODO: Constructors - call super, pass params	
+      // TODO: Constructors - call super, pass params  
       foreach (PropertyInfo info in staticProperties) { 
         this.emitter.AppendProperty(info, true);
-				this.emitter.AppendBreak();
+        this.emitter.AppendBreak();
       };
 
       foreach (PropertyInfo info in instanceProperties) {
         this.emitter.AppendProperty(info, false);
-				this.emitter.AppendBreak();
+        this.emitter.AppendBreak();
       };
-									
+                  
       foreach (MethodInfo info in staticMethods) {
         this.emitter.AppendFunction(info, true);
-				this.emitter.AppendBreak();
+        this.emitter.AppendBreak();
       };
-									
+                  
       foreach (MethodInfo info in instanceMethods) {
         this.emitter.AppendFunction(info, false);
-				this.emitter.AppendBreak();
+        this.emitter.AppendBreak();
       };
 
       this.emitter.AppendClassTermination();
