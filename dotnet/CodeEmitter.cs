@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Globalization;
 
 namespace EdgeReference
 {
@@ -74,6 +75,30 @@ namespace EdgeReference
 				this.currentIndentWidth = 0;
 			}
 		}
+
+    protected virtual void BlockStart()
+    {
+      this.buffer.AppendFormat(
+        CultureInfo.InvariantCulture,
+        "{0}{{",
+        this.CurrentIndent);
+
+      this.buffer.AppendLine();
+      this.Indent();
+    }
+
+    protected void BlockEnd()
+    {
+      this.Outdent();
+
+      this.buffer.AppendFormat(
+        CultureInfo.InvariantCulture,
+        "{0}}}",
+        this.CurrentIndent);
+
+      this.buffer.AppendLine();
+    }
+
 	}
 }
 

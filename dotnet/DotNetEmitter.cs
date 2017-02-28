@@ -12,19 +12,31 @@ namespace EdgeReference
   {
     private Type source;
 
-    private Dictionary<string, bool> referencedTypes;
+    private Dictionary<string, bool> referencedAssemblies;
 
     private Dictionary<string, bool> referencedNamespaces;
 
     public DotNetEmitter(Type source, StringBuilder existingBuffer = null)
     {
-      this.referencedTypes = new Dictionary<string, bool>();
+      this.referencedAssemblies = new Dictionary<string, bool>();
+      this.referencedNamespaces = new Dictionary<string, bool>();
       this.source = source;
 
       // Can optionally supply a buffer that has already been initialized.
       if (existingBuffer != null) {
         this.buffer = existingBuffer;
       }
+    }
+
+    /// <summary>
+    /// Resets formatting and references for this builder.  Used to clear 
+    /// generation context for a separate, unrelated block of code.
+    /// </summary>
+    public void Reset()
+    {
+      this.referencedAssemblies.Clear();
+      this.referencedNamespaces.Clear();
+      this.currentIndentWidth = 0;
     }
 
     #region References
@@ -38,11 +50,11 @@ namespace EdgeReference
       string belongsTo = type.Assembly.FullName;
 
       // Already referenced; don't add again
-      if (this.referencedTypes.ContainsKey(belongsTo)) {
+      if (this.referencedAssemblies.ContainsKey(belongsTo)) {
         return;
       }
 
-      this.referencedTypes.Add(belongsTo, true);
+      this.referencedAssemblies.Add(belongsTo, true);
 
       // Determine file name of assembly.
       string assemblyFileName = type.Assembly.Location;
@@ -54,7 +66,7 @@ namespace EdgeReference
 
       this.buffer.AppendFormat(
         CultureInfo.InvariantCulture,
-        "#r \"{0}\";",
+        "#r \"{0}\"",
         assemblyFileName);
 
       this.buffer.AppendLine();
@@ -111,36 +123,117 @@ namespace EdgeReference
 
     #region Class
 
-    public void AppendClassStart() 
+    public void AppendClassStart(string className = null) 
     {
-      const string ClassHeaderTemplate = "{0}public static class {1}Proxy";
+      className = className ?? (this.source.Name + "Proxy");
+
+      const string ClassHeaderTemplate = "{0}public class {1}";
       
       this.buffer.AppendFormat(
         CultureInfo.InvariantCulture,
         ClassHeaderTemplate,
         this.CurrentIndent,
-        this.source.Name);
+        className);
 
       this.buffer.AppendLine();
 
-      this.buffer.AppendFormat(
-        CultureInfo.InvariantCulture,
-        "{0}{{",
-        this.CurrentIndent);
-
-      this.buffer.AppendLine();
-
-      this.Indent();
+      this.BlockStart();
     }
 
     public void AppendClassEnd()
     {
-      this.Outdent();
-      
+      this.BlockEnd();
+    }
+
+    #endregion
+
+    #region Edge functions
+
+    public void AppendEdgeFuncStart(string name) {
+      const string EdgeFuncTemplate = 
+        "var {0} = edge.func({{ source: () => {{/*";
+
       this.buffer.AppendFormat(
         CultureInfo.InvariantCulture,
-        "{0}}}",
+        EdgeFuncTemplate,
+        name);
+
+      this.buffer.AppendLine();
+    }
+
+    public void AppendEdgeFuncEnd(string methodName) {
+      if (string.IsNullOrWhiteSpace(methodName)) {
+        this.buffer.AppendLine("*/}});");
+        this.buffer.AppendLine();
+      } else {
+        this.buffer.AppendLine("*/");
+        this.buffer.AppendLine("}, ");
+        this.Indent();
+        this.buffer.Append(this.CurrentIndent);
+        this.buffer.Append("methodName: '");
+        this.buffer.Append(methodName);
+        this.buffer.AppendLine("'");
+        this.Outdent();
+        this.buffer.AppendLine("});");
+        this.buffer.AppendLine();
+      }
+
+      this.Reset();
+    }
+
+    #endregion
+
+    #region Constructors
+
+    public void AppendStandaloneConstructors(ConstructorInfo[] constructors)
+    {
+      for (var i=0; i<constructors.Length; i++) {
+        this.AppendStandaloneConstructor(constructors[i]);
+      }
+    }
+
+    private void AppendStandaloneConstructor(ConstructorInfo info)
+    {
+      this.AppendDefaultStandaloneStart(
+        "Constructor",
+        new Type[] { this.source });
+
+      this.AppendConstructor(info);
+      this.AppendDefaultStandaloneEnd("ConstructInstance");
+    }
+
+    public void AppendConstructor(ConstructorInfo info)
+    {
+      const string SignatureTemplate = 
+        "{0}public async Task<object> ConstructInstance(dynamic input)";
+
+      this.buffer.AppendFormat(
+        CultureInfo.InvariantCulture,
+        SignatureTemplate,
         this.CurrentIndent);
+      
+      this.buffer.AppendLine();
+
+      this.BlockStart();
+
+      this.AppendConstructionLine(info);
+      this.AppendConvertAndReturn(this.source);
+
+      this.BlockEnd();
+    }
+
+    private void AppendConstructionLine(ConstructorInfo info)
+    {
+      const string ConstructionTemplate = 
+        "{0}{1} _result = new {1}({2});";
+
+      // TODO: Arguments
+      this.buffer.AppendFormat(
+        CultureInfo.InvariantCulture,
+        ConstructionTemplate,
+        this.CurrentIndent,
+        this.source.FullName,
+        string.Empty);
 
       this.buffer.AppendLine();
     }
@@ -148,12 +241,6 @@ namespace EdgeReference
     #endregion
 
     #region Properties
-    
-    public void AppendProperty(PropertyInfo info, bool isStatic)
-    {
-      AppendGetter(info, isStatic);
-      AppendSetter(info, isStatic);
-    }
 
     public void AppendGetter(PropertyInfo info, bool isStatic)
     {
@@ -164,9 +251,12 @@ namespace EdgeReference
       }
 
       const string SignatureTemplate = 
-        "{0}public static async Task<object> Get_{1}({2})";
+        "{0}public async Task<object> Get_{1}({2})";
 
-      string instanceReference = isStatic ? string.Empty : "object _referenceId";
+      string instanceReference = 
+        isStatic
+          ? "object unused" 
+          : "object _referenceId";
 
       this.buffer.AppendFormat(
         CultureInfo.InvariantCulture,
@@ -177,24 +267,18 @@ namespace EdgeReference
 
       this.buffer.AppendLine();
 
-      this.buffer.AppendLine("{");
-
-      this.Indent();
-
-      this.AppendTaskStart(info.PropertyType);
+      this.BlockStart();
 
       if (!isStatic) {
-        this.AppendParentReferenceFetch("_referenceId");
+        this.AppendReferenceIdConversion("_referenceId");
+        this.AppendParentReferenceFetch("_refId");
       }
 
       this.AppendGetterPropertyRetrieval(info.Name, getter);
 
       this.AppendConvertAndReturn(info.PropertyType);
 
-      this.AppendTaskEnd();
-
-      this.Outdent();
-      this.buffer.AppendLine("}");
+      this.BlockEnd();
     }
 
     private void AppendParentReferenceFetch(string referenceParameterName)
@@ -209,6 +293,87 @@ namespace EdgeReference
         GenerateReferenceRetrieval(referenceParameterName));
 
       this.buffer.AppendLine();
+    }
+
+    public void AppendStandaloneProperties(
+      PropertyInfo[] properties,
+      bool isStatic)
+    {
+      for (var i=0; i<properties.Length; i++) {
+        AppendStandaloneProperty(properties[i], isStatic);
+      }
+    }
+
+    private void AppendStandaloneProperty(PropertyInfo property, bool isStatic)
+    {
+      this.AppendStandaloneGetter(property, isStatic);
+      this.AppendStandaloneSetter(property, isStatic);
+    }
+
+    private void AppendStandaloneGetter(PropertyInfo property, bool isStatic)
+    {
+      if (property.GetGetMethod() == null) {
+        return;
+      }
+
+      string getterName = "Get_" + property.Name;
+      this.AppendDefaultStandaloneStart(
+        getterName,
+        new Type[] { property.PropertyType });
+
+      // Actual getter
+      this.AppendGetter(property, isStatic);
+
+      this.AppendDefaultStandaloneEnd(getterName);
+    }
+
+    private void AppendStandaloneSetter(PropertyInfo property, bool isStatic)
+    {
+      if (property.GetSetMethod() == null) {
+        return;
+      }
+
+      string setterName = "Set_" + property.Name;
+      this.AppendDefaultStandaloneStart(
+        setterName, 
+        new Type[] { property.PropertyType });
+
+      this.AppendSetter(property, isStatic);
+
+      this.AppendDefaultStandaloneEnd(setterName);
+    }
+
+    private void AppendDefaultStandaloneStart(
+      string funcName,
+      Type[] referencedTypes)
+    {
+      this.AppendEdgeFuncStart(funcName);
+
+      this.AppendReferenceFor(typeof(ReferenceManager));
+      this.AppendReferenceFor(this.source);
+
+      // Return and parameter type references
+      foreach (Type referencedType in referencedTypes) 
+      {
+        this.AppendReferenceFor(referencedType);
+      }
+
+      this.buffer.AppendLine();
+
+      // usings
+      this.AppendUsingFor(typeof(System.Threading.Tasks.Task));
+      this.AppendUsingFor(typeof(EdgeReference.ReferenceManager));
+
+      this.buffer.AppendLine();
+
+      // class start
+      this.AppendClassStart("Startup");
+    }
+
+    private void AppendDefaultStandaloneEnd(string methodName)
+    {
+      this.AppendClassEnd();
+      this.AppendEdgeFuncEnd(methodName);
     }
 
     private void AppendGetterPropertyRetrieval(
@@ -236,7 +401,7 @@ namespace EdgeReference
       }
 
       const string SignatureTemplate = 
-        "{0}public static async Task Set_{1}(dynamic parameters){2}";
+        "{0}public async Task Set_{1}(dynamic parameters){2}";
 
       this.buffer.AppendFormat(
         CultureInfo.InvariantCulture,
@@ -245,13 +410,14 @@ namespace EdgeReference
         info.Name,
         Environment.NewLine);
 
-      const string setLineTemplate = "_parent.{0} = parameters.value;";
+      const string setLineTemplate = "{0}.{1} = parameters.value;";
       string setLine = string.Format(
         CultureInfo.InvariantCulture,
         setLineTemplate,
+        setter.IsStatic ? this.source.FullName : "_parent",
         info.Name);
 
-      this.AppendFunctionBody(setter, setLine);
+      this.AppendFunctionBody(setter, setLine, false);
     }
 
     private void AppendParameterConversion(
@@ -270,6 +436,26 @@ namespace EdgeReference
 
     #region Functions
 
+    public void AppendStandaloneFunctions(MethodInfo[] methods)
+    {
+      for (var i=0; i<methods.Length; i++) {
+        this.AppendStandaloneFunction(methods[i]);
+      }
+    }
+
+    private void AppendStandaloneFunction(MethodInfo method)
+    {
+      Type[] referenceTypes = method
+        .GetParameters()
+        .Select(param => param.ParameterType)
+        .Concat(new Type[] { method.ReturnType })
+        .ToArray();
+
+      this.AppendDefaultStandaloneStart(method.Name, referenceTypes);
+      this.AppendFunction(method);
+      this.AppendDefaultStandaloneEnd(method.Name);
+    }
+
     public void AppendFunction(MethodInfo info)
     {
       ParameterInfo[] parameters = info.GetParameters();
@@ -282,30 +468,27 @@ namespace EdgeReference
         callLineTemplate,
         callArguments);
 
-      AppendFunctionBody(info, callLine);
+      AppendFunctionBody(info, callLine, true);
     }
 
-    private void AppendFunctionBody(MethodInfo info, string callLine)
+    private void AppendFunctionBody(
+      MethodInfo info,
+      string callLine,
+      bool isAsync)
     {
       ParameterInfo[] parameters = info.GetParameters();
 
-      this.buffer.AppendFormat(
-        CultureInfo.InvariantCulture,
-        "{0}{",
-        this.CurrentIndent);
-
       this.buffer.AppendLine();
+      this.BlockStart();
 
-      this.Indent();
-
-      this.AppendTaskStart(info.ReturnType);
+      if (isAsync) {
+        this.AppendTaskStart(info.ReturnType);
+      }
 
       if (!info.IsStatic) 
       {
-        this.buffer.AppendLine(
-            GenerateArgumentConversion(
-              "_parent",
-              "_referenceId"));
+        this.AppendReferenceIdConversion("parameters._referenceId");
+        this.AppendParentReferenceFetch("_refId");
       }
 
       bool addLine = false;
@@ -320,29 +503,28 @@ namespace EdgeReference
       }
 
       this.buffer.Append(this.CurrentIndent);
-      this.buffer.Append(callLine);
+      this.buffer.AppendLine(callLine);
 
-      // TODO: Check for void returns
+      // Check for void returns
       this.AppendConvertAndReturn(info.ReturnType);
 
-      this.AppendTaskEnd();
+      if (isAsync) {
+        this.AppendTaskEnd();
+      }
 
-      this.Outdent();
-
-      this.buffer.Append(this.CurrentIndent);
-      this.buffer.AppendLine("}");
-    
+      this.BlockEnd();
     }
 
     private string GenerateFunctionSignature(MethodInfo info)
     {
       const string SignatureTemplate = 
-        "{0}public static async Task<object> {1}({{0}})";
+        "{0}public async Task{1} {2}(dynamic parameters)";
 
       string result = string.Format(
         CultureInfo.InvariantCulture,
         SignatureTemplate,
         this.CurrentIndent,
+        (info.ReturnType == typeof(void)) ? string.Empty : "<object>",
         info.Name);
 
       return result;
@@ -400,7 +582,7 @@ namespace EdgeReference
       const string ConversionTemplate = 
         "{0}parameters.{1} = {2};";
 
-      string retrieval = GenerateReferenceRetrieval(sourceName);
+      string retrieval = GenerateReferenceRetrieval("parameters." + sourceName);
       
       return string.Format(
         CultureInfo.InvariantCulture,
@@ -413,14 +595,15 @@ namespace EdgeReference
     private string GenerateCallLine(MethodInfo info)
     {
       const string ReturnCallTemplate = 
-        "{0} _result = _parent.{1}({{0}});";
+        "{0} _result = {1}.{2}({{0}});";
 
-      const string VoidCallTemplate = "_parent.{1}({{0}});";
+      const string VoidCallTemplate = "{0}.{1}({{0}});";
 
       if (info.ReturnType == typeof(void)) {
         return string.Format (
           CultureInfo.InvariantCulture,
           VoidCallTemplate,
+          info.IsStatic ? this.source.FullName : "_parent",
           info.Name);
       }
       else
@@ -429,6 +612,7 @@ namespace EdgeReference
           CultureInfo.InvariantCulture,
           ReturnCallTemplate,
           info.ReturnType.FullName,
+          info.IsStatic ? this.source.FullName : "_parent",
           info.Name);
       }
     }
@@ -438,7 +622,7 @@ namespace EdgeReference
     private string JavaScriptFriendlyType(Type type)
     {
       if (ReflectionUtils.IsReferenceType(type)) {
-        return "int";
+        return "long";
       } else {
         return type.FullName;
       }
@@ -464,7 +648,7 @@ namespace EdgeReference
       if (ReflectionUtils.IsReferenceType(returnType)) {
         this.buffer.AppendFormat(
           CultureInfo.InvariantCulture,
-          "{0}return ReferenceManager.EnsureReference(_result);{1}",
+          "{0}return ReferenceManager.Instance.EnsureReference(_result);{1}",
           this.CurrentIndent,
           Environment.NewLine);
       } 
@@ -481,12 +665,15 @@ namespace EdgeReference
     private void AppendTaskStart(Type returnType) 
     {
       this.buffer.Append(this.CurrentIndent);
-
-      if (returnType != typeof(void)) {
-        this.buffer.Append("return ");
+      if (returnType == typeof(void)) {
+        this.buffer.AppendLine("await Task.Factory.StartNew(() => {");
+      }
+      else
+      {
+        this.buffer.AppendLine(
+          "return await Task<object>.Factory.StartNew(() => {");
       }
 
-      this.buffer.AppendLine("TaskFactory.StartNew(() => {");
       this.Indent();
     }
 
@@ -495,6 +682,21 @@ namespace EdgeReference
       this.Outdent();
       this.buffer.Append(this.CurrentIndent);
       this.buffer.AppendLine("});");
+    }
+
+    private void AppendReferenceIdConversion(string referenceIdName)
+    {
+      // This weird conversion happens because the value may be passed as 
+      // int OR long
+      const string ConversionTemplate = 
+        "{0}long _refId = {1} is long ? (long){1} : (long)(int){1};{2}{2}";
+
+      this.buffer.AppendFormat(
+        CultureInfo.InvariantCulture,
+        ConversionTemplate,
+        this.CurrentIndent,
+        referenceIdName,
+        Environment.NewLine);
     }
   }
 }

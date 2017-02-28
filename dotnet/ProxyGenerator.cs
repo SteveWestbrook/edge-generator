@@ -22,7 +22,7 @@ namespace EdgeReference
 
     private DotNetEmitter dotNetEmitter;
 
-    protected ProxyGenerator ()
+    protected ProxyGenerator()
     {
     }
 
@@ -39,26 +39,31 @@ namespace EdgeReference
 
       try 
       {
-        ProxyGenerator generator = new ProxyGenerator ();
-        Assembly owningAssembly = Assembly.ReflectionOnlyLoadFrom (assemblyPath);
-        Type type = owningAssembly.GetType (typeNameWithNamespace);
+        if (generatedProxies.ContainsKey(typeNameWithNamespace)) {
+          return;
+        }
+
+        generatedProxies.TryAdd(typeNameWithNamespace, null);
+
+        ProxyGenerator generator = new ProxyGenerator();
+        Assembly owningAssembly = Assembly.ReflectionOnlyLoadFrom(assemblyPath);
+        Type type = owningAssembly.GetType(typeNameWithNamespace);
 
         generator.classGenerated = classGeneratedCallback;
         generator.Generate(type);
       } catch (Exception ex) {
-        Console.WriteLine ("Error during generation: ");
-        Console.WriteLine (ex.ToString ());
+        Console.WriteLine("Error during generation: ");
+        Console.WriteLine(ex.ToString());
         throw;
       }
     }
 
     private void Generate(Type target)
     {
-      // TODO: file name should be the full name, with '.' replaced with '-'.
-      // this.javaScriptClassName = target.Name;
-      // this.javaScriptFullName = target.FullName.Replace ('.', '-');
       this.emitter = new JavaScriptEmitter();
       this.dotNetEmitter = new DotNetEmitter(target, this.emitter.Buffer);
+
+      ConstructorInfo[] constructors = target.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
 
       PropertyInfo[] staticProperties = RetrieveProperties(target, BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly);
 
@@ -79,16 +84,12 @@ namespace EdgeReference
       this.emitter.AppendBasicRequires(target);
 
       // Get all non-value, non-string property types.
-      this.emitter.AppendRequires(
+      IEnumerable<Type> requireProperties = 
         staticProperties.Concat(instanceProperties)
         .Distinct()
         .Where(info => ReflectionUtils.IsReferenceType(info.PropertyType))
-        .Select(info => info.PropertyType));
-
-    IEnumerable<Type> requireProperties = 
-        staticProperties.Concat (instanceProperties)
-        .Distinct ()
-        .Select ((info) => {
+        .Where(info => info.PropertyType.FullName != target.FullName)
+        .Select((info) => {
             return info.PropertyType;
         });
 
@@ -113,13 +114,25 @@ namespace EdgeReference
           return result;
         });
 
+      requireMethods = requireMethods.Where(type => type.FullName != target.FullName);
+
       this.emitter.AppendRequires(requireProperties);
       this.emitter.AppendRequires(requireMethods);
       this.emitter.AppendLine();
 
-      // TODO: Reference component
+      // Proxies to dot net objects.
+      this.dotNetEmitter.AppendStandaloneConstructors(constructors);
+      this.dotNetEmitter.AppendStandaloneProperties(staticProperties, true);
+      this.dotNetEmitter.AppendStandaloneProperties(instanceProperties, false);
+      this.dotNetEmitter.AppendStandaloneFunctions(staticMethods);
+      this.dotNetEmitter.AppendStandaloneFunctions(instanceMethods);
 
       this.emitter.AppendClassDefinition(target);
+
+      foreach (ConstructorInfo info in constructors) {
+        this.emitter.AppendConstructor(info);
+        this.emitter.AppendBreak();
+      }
 
       // TODO: Constructors - call super, pass params  
       foreach (PropertyInfo info in staticProperties) { 
@@ -143,14 +156,55 @@ namespace EdgeReference
       };
 
       this.emitter.AppendClassTermination();
-      this.OnClassGenerated (target, this.emitter.ToString ());
+      this.emitter.AppendExport(target);
 
-      // TODO: After generation, look at base classes
+      this.OnClassGenerated(target, this.emitter.ToString());
+
+      // After generation, look at base classes
+      if (target.BaseType != typeof(object)) {
+        this.GenerateProxy(target.BaseType);
+      }
+
+      this.GenerateProxiesForProperties(staticProperties);
+      this.GenerateProxiesForProperties(instanceProperties);
+      this.GenerateProxiesForFunctions(staticMethods);
+      this.GenerateProxiesForFunctions(instanceMethods);
+    }
+
+    private void GenerateProxiesForProperties(PropertyInfo[] properties)
+    {
+      for (var i=0; i<properties.Length; i++) {
+        this.GenerateProxy(properties[i].PropertyType);
+      }
+    }
+
+    private void GenerateProxiesForFunctions(MethodInfo[] methods)
+    {
+      for (var i=0; i<methods.Length; i++) {
+        this.GenerateProxy(methods[i].ReturnType);
+
+        ParameterInfo[] parameters = methods[i].GetParameters();
+        for (var j=0; j<parameters.Length; j++) {
+          GenerateProxy(parameters[j].ParameterType);
+        }
+      }
+    }
+
+    private void GenerateProxy(Type type)
+    {
+      if (!ReflectionUtils.IsReferenceType(type)) {
+        return;
+      }
+
+      ProxyGenerator.Generate(
+        type.FullName,
+        type.Assembly.Location,
+        this.classGenerated);
     }
 
     private PropertyInfo[] RetrieveProperties(Type target, BindingFlags flags)
     {
-      PropertyInfo[] result = target.GetProperties (flags);
+      PropertyInfo[] result = target.GetProperties(flags);
 
       // Alphabetical order
       result = result.OrderBy((member) => member.Name).ToArray();
@@ -170,11 +224,10 @@ namespace EdgeReference
     {
       string name = classType.FullName;
 
-      if (
-        generatedProxies.TryAdd(name, generatedJavaScript) 
-          && this.classGenerated != null) {
+      generatedProxies.AddOrUpdate(name, generatedJavaScript, (a,b) => generatedJavaScript);
 
-        this.classGenerated (name, generatedJavaScript);
+      if (this.classGenerated != null) {
+        this.classGenerated(name, generatedJavaScript);
       }
     }
   }

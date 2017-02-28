@@ -56,15 +56,13 @@ namespace EdgeReference.Test
 				"public static async Task<object> Get_Name(object _referenceId)" +
 				Environment.NewLine +
 				"{" + Environment.NewLine + 
-				"    return TaskFactory.StartNew(() => {" + Environment.NewLine +
-				"        DotNetTest.TestType1 _parent = " + 
+				"    DotNetTest.TestType1 _parent = " + 
 				"(DotNetTest.TestType1)" + 
 				"ReferenceManager.Instance.PullReference(_referenceId);" +
 				Environment.NewLine + 
-				"        System.String _result = _parent.Name;" +
+				"    System.String _result = _parent.Name;" +
 				Environment.NewLine +
-				"        return _result;" + Environment.NewLine +
-				"    });" + Environment.NewLine +
+				"    return _result;" + Environment.NewLine +
 				"}" + Environment.NewLine;
 
 			PropertyInfo info = target.GetProperty("Name");
@@ -85,16 +83,14 @@ namespace EdgeReference.Test
 				"public static async Task<object> Get_Child(object _referenceId)" +
 				Environment.NewLine +
 				"{" + Environment.NewLine + 
-				"    return TaskFactory.StartNew(() => {" + Environment.NewLine +
-				"        DotNetTest.TestType1 _parent = " + 
+				"    DotNetTest.TestType1 _parent = " + 
 				"(DotNetTest.TestType1)" + 
 				"ReferenceManager.Instance.PullReference(_referenceId);" +
 				Environment.NewLine + 
-				"        DotNetTest.TestType2 _result = _parent.Child;" +
+				"    DotNetTest.TestType2 _result = _parent.Child;" +
 				Environment.NewLine +
-				"        return ReferenceManager.EnsureReference(_result);" + 
+				"    return ReferenceManager.EnsureReference(_result);" + 
 				Environment.NewLine +
-				"    });" + Environment.NewLine +
 				"}" + Environment.NewLine;
 
 			PropertyInfo info = target.GetProperty("Child");
@@ -115,11 +111,9 @@ namespace EdgeReference.Test
 				"public static async Task<object> Get_SharedData()" +
 				Environment.NewLine +
 				"{" + Environment.NewLine + 
-				"    return TaskFactory.StartNew(() => {" + Environment.NewLine +
-				"        System.String _result = DotNetTest.TestType1.SharedData;" +
+				"    System.String _result = DotNetTest.TestType1.SharedData;" +
 				Environment.NewLine +
-				"        return _result;" + Environment.NewLine +
-				"    });" + Environment.NewLine +
+				"    return _result;" + Environment.NewLine +
 				"}" + Environment.NewLine;
 
 			PropertyInfo info = target.GetProperty("SharedData");
@@ -140,14 +134,12 @@ namespace EdgeReference.Test
 				"public static async Task Set_Name(dynamic parameters)" +
 				Environment.NewLine +
 				"{" + Environment.NewLine +
-				"    return TaskFactory.StartNew(() => {" + Environment.NewLine +
-				"        DotNetTest.TestType1 _parent = " + 
+				"    DotNetTest.TestType1 _parent = " + 
 				"(DotNetTest.TestType1)" + 
-				"ReferenceManager.Instance.PullReference(_referenceId);" +
+				"ReferenceManager.Instance.PullReference(parameters._referenceId);" +
 				Environment.NewLine + 
-				"        _parent.Name = parameters.Name;" +
+				"    _parent.Name = parameters.value;" +
 				Environment.NewLine +
-				"    });" + Environment.NewLine +
 				"}" + Environment.NewLine;
 
 			PropertyInfo info = target.GetProperty("Name");

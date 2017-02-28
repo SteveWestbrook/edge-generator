@@ -7,20 +7,23 @@ namespace EdgeReference
 {
   public class ReferenceManager : MarshalByRefObject
   {
-    public Dictionary<int, object> referencesById { get; private set; }
+    public Dictionary<long, object> referencesById { get; private set; }
 
-    public Dictionary<object, int> idsByReference { get; private set; }
+    public Dictionary<object, long> idsByReference { get; private set; }
+
+    public Dictionary<long, long> referenceCount { get; private set; }
 
     private static ReferenceManager instance;
 
     private static object instanceLock = new object();
 
-    private volatile int nextTemplateId = 0;
+    private long nextTemplateId = 0;
 
     protected ReferenceManager()
     {
-      this.referencesById = new Dictionary<int, object> ();
-      this.idsByReference = new Dictionary<object, int> ();
+      this.referencesById = new Dictionary<long, object>();
+      this.idsByReference = new Dictionary<object, long>();
+      this.referenceCount = new Dictionary<long, long>();
     }
 
     /// <summary>
@@ -36,7 +39,7 @@ namespace EdgeReference
           {
             if (instance == null) 
             {
-              instance = new ReferenceManager ();
+              instance = new ReferenceManager();
             }
           }
         }
@@ -54,36 +57,61 @@ namespace EdgeReference
     /// Initializes the lifetime service.
     /// </summary>
     /// <returns>The lifetime service.</returns>
-    public override object InitializeLifetimeService ()
+    public override object InitializeLifetimeService()
     {
       return null;
     }
 
-    public int EnsureReference(object reference)
+    // TODO: All dictionary modifications should be thread-safe
+
+    public long EnsureReference(object reference)
     {
-      int id;
+      if (reference == null) {
+        return 0;
+      }
+
+      long id;
+
       if (!this.idsByReference.TryGetValue(reference, out id)) {
-        id = Interlocked.Increment (ref this.nextTemplateId);
+        // TODO: The id here can eventually get exhausted.  Should either use a guid or reuse ids
+        id = Interlocked.Increment(ref this.nextTemplateId);
         this.referencesById.Add(id, reference);
-        this.idsByReference.Add (reference, id);
+        this.idsByReference.Add(reference, id);
+        this.referenceCount.Add(id, 1);
+      } else {
+        this.referenceCount[id]++;                
       }
 
       return id;
     }
 
-    public object PullReference(int id)
+    public object PullReference(long id)
     {
       object reference;
       if (this.referencesById.TryGetValue(id, out reference)) {
         return reference;
       }
 
-      string message = string.Format (
-        CultureInfo.InvariantCulture,
-        "Reference not found for id {0}",
-        id);
+      return null;
+    }
 
-      throw new InvalidOperationException(message);
+    public bool RemoveReference(long id)
+    {
+      object reference;
+
+      if (!this.referencesById.TryGetValue(id, out reference)) {
+        return false;
+      }
+
+      long references = --this.referenceCount[id];                
+
+      if (references <= 0) {
+        this.referencesById.Remove(id);
+        this.idsByReference.Remove(reference);
+        this.referenceCount.Remove(id);
+      }
+
+      return true;
     }
 
   }

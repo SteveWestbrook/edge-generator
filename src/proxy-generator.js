@@ -33,13 +33,10 @@ const proxyGenerator = edge.func(function() {
             input.callback(output);
           });
 
-        Console.WriteLine("1");
-
         ProxyGenerator.Generate(
           input.typeFullName,
           input.assemblyLocation,
           completion);
-        Console.WriteLine("2");
 
         return null;
       }

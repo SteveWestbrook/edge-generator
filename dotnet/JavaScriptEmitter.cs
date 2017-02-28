@@ -18,6 +18,7 @@ namespace EdgeReference
 
     public const string EdgeReferenceModuleName = "edge-reference";
 
+// TODO: Potentially inconsistent line endings here
     /**
      * 0 - indent
      * 1 - static
@@ -76,9 +77,10 @@ namespace EdgeReference
     public void AppendBasicRequires(Type target) 
     {
       AppendRequire(EdgeTypeName, EdgeModuleName);
+      AppendRequire(EdgeReferenceTypeName, EdgeReferenceModuleName);
 
       if (target.BaseType != null && target.BaseType != typeof(object)) {
-        AppendRequire(target.BaseType);
+        AppendRelativeRequire(target.BaseType);
       }
     }
 
@@ -88,7 +90,7 @@ namespace EdgeReference
         if (!this.appended.ContainsKey(type.Name)
             && ReflectionUtils.IsReferenceType(type)) {
           this.appended.Add(type.Name, true);
-          this.AppendRequire(type);        
+          this.AppendRelativeRequire(type);        
         }
       }
     }
@@ -104,13 +106,12 @@ namespace EdgeReference
       buffer.AppendLine ();
     }
 
-    private void AppendRequire(Type type) {
+    private void AppendRelativeRequire(Type type) {
       string name = type.Name;
 
-      // TODO: look up name in collection of existing names.
       this.buffer.AppendFormat(
         CultureInfo.InvariantCulture,
-        "const {0} = require('{1}');",
+        "const {0} = require('./{1}.js');",
         name,
         ReflectionUtils.ConvertFullName(type.FullName));
 
@@ -160,6 +161,44 @@ namespace EdgeReference
     }
 
     #endregion Class
+
+    #region Exports
+
+    public void AppendExport(Type target)
+    {
+      this.buffer.AppendLine();
+      this.buffer.Append("module.exports = ");
+      this.buffer.AppendLine(target.Name);
+    }
+
+    #endregion
+
+    #region Constructors
+
+    public void AppendConstructor(ConstructorInfo source)
+    {
+      const string ConstructorTemplate = 
+        "{0}constructor(referenceId, args) {{";
+
+      this.buffer.AppendFormat(
+        CultureInfo.InvariantCulture,
+        ConstructorTemplate,
+        this.CurrentIndent);
+      
+      this.BlockStart();
+
+      // TODO: allow multiple constructors with args passed in
+      this.buffer.AppendFormat(
+        CultureInfo.InvariantCulture,
+        "{0}super(referenceId, Constructor, args);",
+        this.CurrentIndent);
+
+      this.buffer.AppendLine();
+
+      this.BlockEnd();
+    }
+
+    #endregion
 
     #region Properties
 
@@ -229,21 +268,21 @@ namespace EdgeReference
       if (ReflectionUtils.IsReferenceType(type)) {
         result = string.Format(
           CultureInfo.InvariantCulture,
-          @"{0}{1}var returnId = Reference.Get_{2}({3});
-{0}{1}return new {4}(returnId);",
+          @"{0}{1}var returnId = Get_{2}({3}, true);
+{0}{1}return (returnId ? new {4}(returnId) : null);",
           this.CurrentIndent,
           this.incrementalIndent,
           name,
-          isStatic ? string.Empty : "this._referenceId",
+          isStatic ? "null" : "this._referenceId",
           this.DetermineJavaScriptTypeName(type));
       } else {
         result = string.Format(
           CultureInfo.InvariantCulture,
-          "{0}{1}return Reference.Get_{2}({3});",
+          "{0}{1}return Get_{2}({3}, true);",
           this.CurrentIndent,
           this.incrementalIndent,
           name,
-          isStatic ? string.Empty : "this._referenceId");
+          isStatic ? "null" : "this._referenceId");
       }
 
       return result;
@@ -252,23 +291,22 @@ namespace EdgeReference
     private string GenerateSetterBody(string name, Type type, bool isStatic) {
       string result;
 
-      // TODO: Here, only one parameter can be provided.
       if (ReflectionUtils.IsReferenceType(type)) {
         result = string.Format(
           CultureInfo.InvariantCulture,
-          "{0}{1}Reference.Set_{2}({3}value._edgeId));",
+          "{0}{1}Set_{2}({{ {3}value: value._referenceId }}, true);",
           this.CurrentIndent,
           this.incrementalIndent,
           name,
-          isStatic ? string.Empty : "this._referenceId, ");
+          isStatic ? string.Empty : "_referenceId: this._referenceId, ");
       } else {
         result = string.Format(
           CultureInfo.InvariantCulture,
-          "{0}{1}Reference.Set_{2}({3}value));",
+          "{0}{1}Set_{2}({{ {3}value: value }}, true);",
           this.CurrentIndent,
           this.incrementalIndent,
           name,
-          isStatic ? string.Empty : "this._referenceId, ");
+          isStatic ? string.Empty : "_referenceId: this._referenceId, ");
       }
 
       return result;
@@ -290,34 +328,38 @@ namespace EdgeReference
 
       string argumentNameList = string.Join(", ", argumentNames);
 
+      if (argumentNameList.Length > 0) {
+        argumentNameList += ", ";
+      }
+
       const string SignatureTemplate = 
-        "{0}{1}({2}) {{";
+        "{0}{1}{2}({3}callback) {{";
 
       this.buffer.AppendFormat( 
         CultureInfo.InvariantCulture,
         SignatureTemplate,
         this.CurrentIndent,
+        isStatic ? "static " : string.Empty,
         source.Name,
         argumentNameList);
 
       this.buffer.AppendLine();
+
       // Indent
       this.Indent();
 
       // Append argument conversions
-      this.AppendArgumentConversions(source);
-
-			this.buffer.AppendLine();
-			this.buffer.AppendLine();
+      if (this.AppendArgumentConversions(source))
+      {
+        this.buffer.AppendLine();
+        this.buffer.AppendLine();
+      }
 
       // Append call line
       this.buffer.AppendLine(GenerateFunctionCall(
         source,
         isStatic,
         arguments));
-
-      // Append return line
-      this.buffer.AppendLine(GenerateReturnLine(source.ReturnType));
 
       // Outdent
       this.Outdent();
@@ -328,81 +370,109 @@ namespace EdgeReference
         this.CurrentIndent);
     }
 
-    private void AppendArgumentConversions(MethodInfo source)
+    private bool AppendArgumentConversions(MethodInfo source)
     {
+      bool result = false;
       foreach (ParameterInfo parameter in source.GetParameters()) {
-            AppendArgumentConversion(parameter);
+        result |= AppendArgumentConversion(parameter);
       }
+
+      return result;
     }
 
-    private void AppendArgumentConversion(ParameterInfo argument) 
+    private bool AppendArgumentConversion(ParameterInfo argument) 
     {
       const string ArgumentConversionLineTemplate = 
-        "{0}{1} = {1} ? {1}._edgeId : 0;";
+        "{0}{1} = {1} ? {1}._referenceId : 0;";
 
       if (ReflectionUtils.IsReferenceType(argument.ParameterType)) {
         this.buffer.AppendFormat(
           CultureInfo.InvariantCulture,
           ArgumentConversionLineTemplate,
-				this.CurrentIndent,
+          this.CurrentIndent,
           argument.Name);
+
+        return true;
       }
+
+      return false;
     }
-  
+
     private string GenerateFunctionCall(
       MethodInfo source,
       bool isStatic,
       ParameterInfo[] arguments)
     {
-
       const string FunctionCallLineTemplate =
-        "{0}var result = Reference.{1}({2});";
-      
-      string referenceParameter = 
-        isStatic ? 
-        string.Empty :
-        "_referenceId: _referenceId, " + Environment.NewLine;
+        "{0}{1}EdgeReference.callbackOrReturn({2}{3},{2}{4},{2}{5},{2}callback);";
 
-      string argumentObject = string.Concat(
-        "{",
-        referenceParameter,
-        string.Join(
-          "," + Environment.NewLine + this.CurrentIndent,
-          arguments.Select(parameter => {
-            return string.Concat(
-              parameter.Name,
-              ": ",
-              parameter.Name);
-            })
-            .ToArray()),
-        "}");
+      string referenceParameter;
+      IEnumerable<string> argumentContent = arguments.Select(parameter => {
+        return string.Concat(
+          parameter.Name,
+          ": ",
+          parameter.Name);
+        });
+
+      if (!isStatic)
+      {
+        argumentContent = (new string[] { 
+          "_referenceId: this._referenceId"
+        }).Concat(argumentContent);
+      }
+
+      string divider = string.Concat(
+          ",",
+          Environment.NewLine,
+          this.CurrentIndent,
+          this.incrementalIndent,
+          this.incrementalIndent
+      );
+
+      string argumentObject;
+
+      if (string.IsNullOrWhiteSpace(divider)) {
+        argumentObject = "{}";
+      }
+      else
+      {
+        argumentObject = string.Concat(
+          "{",
+          Environment.NewLine,
+          this.CurrentIndent,
+          this.incrementalIndent,
+          this.incrementalIndent,
+          string.Join(divider, argumentContent.ToArray()),
+          Environment.NewLine,
+          this.CurrentIndent,
+          this.incrementalIndent,
+          "}");
+      }
+
+      string returnStatement;
+      string wrapperType;
+
+      if (source.ReturnType == typeof(void)) {
+        returnStatement = string.Empty;
+        wrapperType = "null";
+      }
+      else
+      {
+        returnStatement = "return ";
+        wrapperType = source.ReturnType.Name;
+      }
 
       return string.Format(
         CultureInfo.InvariantCulture,
         FunctionCallLineTemplate,
         this.CurrentIndent,
+        returnStatement,
+        Environment.NewLine + this.CurrentIndent + this.incrementalIndent,
         source.Name,
-        argumentObject);
+        argumentObject,
+        wrapperType);
     }
-
-    private string GenerateReturnLine(Type returnType) {
-      const string ComplexReturnLineTemplate = "{0}return new {1}(result);";
-      const string SimpleReturnLineTemplate = "{0}return result;";
-
-      if (ReflectionUtils.IsReferenceType(returnType)) {
-        return string.Format(
-          CultureInfo.InvariantCulture,
-          ComplexReturnLineTemplate,
-          this.CurrentIndent,
-          DetermineJavaScriptTypeName(returnType));
-      } else {
-        return string.Format(
-          CultureInfo.InvariantCulture,
-          SimpleReturnLineTemplate,
-          this.CurrentIndent);
-      }
-    }
-
+    
     #endregion Functions
 
     public void AppendBreak() {
@@ -421,6 +491,13 @@ namespace EdgeReference
       // TODO: Look up set of stored names here in case of naming conflict
       return type.Name;
     }
+
+    protected override void BlockStart()
+    {
+      this.buffer.AppendLine();
+      this.Indent();
+    }
+
   }
 }
 
