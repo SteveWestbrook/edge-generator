@@ -1,6 +1,20 @@
 const TestType1 = require('./DotNetTest-TestType1.js');
 const TestType2 = require('./DotNetTest-TestType2.js');
 const assert = require('assert');
+const process = require('process');
+const edge = require('edge');
+
+var ReferenceCount = edge.func({ source: () => {/*
+  #r "./dotnet/bin/Debug/EdgeReference.dll"
+
+  using System.Threading.Tasks;
+
+  public class Startup {
+    public async Task<object> Invoke(object input) {
+      return EdgeReference.ReferenceManager.Instance.Count;
+    }
+  }
+*/}});
 
 describe('TestType1', () => {
   describe('#constructor', () => {
@@ -311,20 +325,52 @@ describe('TestType1', () => {
       });
     });
 
-    it('can return itself synchronously', () => {
-      var tt1 = new TestType1();
-      var copy = tt1.ReturnSelf(true);
-      assert.equal(copy._referenceId, tt1._referenceId);
-    });
+    // Note: synchronous support not present atm
+    // it('can return itself synchronously', () => {
+      // var tt1 = new TestType1();
+      // var copy = tt1.ReturnSelf(true);
+      // assert.equal(copy._referenceId, tt1._referenceId);
+    // });
   });
 
   describe('#ReturnTarget', () => {
-    it('returns the target successfully', () => {
+    it('returns the target successfully', (done) => {
       var tt1 = new TestType1();
       var tt2 = new TestType2();
 
-      var tt22 = tt1.ReturnTarget(tt2, true);
-      assert.equal(tt22._referenceId, tt2._referenceId);
+      tt1.ReturnTarget(tt2, (err, result) => {
+        assert.ok(!err);
+        assert.equal(result._referenceId, tt2._referenceId);
+        done();
+      });
+    });
+  });
+
+  // TODO: Unclear whether weak references are not working properly or objects are really not GC'd.
+  describe('#referenceManager', () => {
+    it('should clean up unused resources', (done) => {
+      var beforeCount = ReferenceCount(null, true);
+      var i = 0;
+      var parent = {};
+
+      while (++i < 1000) {
+        parent.tt1 = new TestType1();
+        var afterCount = ReferenceCount(null, true);
+
+        assert.ok(afterCount);
+        assert.notEqual(afterCount, beforeCount);
+
+        delete parent.tt1;
+      }
+
+      setTimeout(() => {
+        var lastCount = ReferenceCount(null, true);
+        console.log(lastCount);
+        console.log(beforeCount);
+        console.log(afterCount);
+        assert.ok(lastCount <= beforeCount);
+        done();
+      }, 1000);
     });
   });
 });

@@ -194,7 +194,7 @@ public class Startup
 {
     public async Task<object> CreateT2Static(dynamic parameters)
     {
-        return Task<object>.Factory.StartNew(() => {
+        return await Task<object>.Factory.StartNew(() => {
             DotNetTest.TestType2 _result = DotNetTest.TestType1.CreateT2Static();
             return ReferenceManager.Instance.EnsureReference(_result);
         });
@@ -216,7 +216,7 @@ public class Startup
 {
     public async Task<object> CreateT2StaticTemplate(dynamic parameters)
     {
-        return Task<object>.Factory.StartNew(() => {
+        return await Task<object>.Factory.StartNew(() => {
             parameters.template = ReferenceManager.Instance.PullReference(parameters.template);
 
             DotNetTest.TestType2 _result = DotNetTest.TestType1.CreateT2StaticTemplate(parameters.template);
@@ -366,7 +366,7 @@ public class Startup
 {
     public async Task<object> CreateNewT2(dynamic parameters)
     {
-        return Task<object>.Factory.StartNew(() => {
+        return await Task<object>.Factory.StartNew(() => {
             long _refId = parameters._referenceId is long ? (long)parameters._referenceId : (long)(int)parameters._referenceId;
 
             DotNetTest.TestType1 _parent = (DotNetTest.TestType1)ReferenceManager.Instance.PullReference(_refId);
@@ -418,7 +418,7 @@ public class Startup
 {
     public async Task<object> ReturnSelf(dynamic parameters)
     {
-        return Task<object>.Factory.StartNew(() => {
+        return await Task<object>.Factory.StartNew(() => {
             long _refId = parameters._referenceId is long ? (long)parameters._referenceId : (long)(int)parameters._referenceId;
 
             DotNetTest.TestType1 _parent = (DotNetTest.TestType1)ReferenceManager.Instance.PullReference(_refId);
@@ -443,7 +443,7 @@ public class Startup
 {
     public async Task<object> ReturnTarget(dynamic parameters)
     {
-        return Task<object>.Factory.StartNew(() => {
+        return await Task<object>.Factory.StartNew(() => {
             long _refId = parameters._referenceId is long ? (long)parameters._referenceId : (long)(int)parameters._referenceId;
 
             DotNetTest.TestType1 _parent = (DotNetTest.TestType1)ReferenceManager.Instance.PullReference(_refId);

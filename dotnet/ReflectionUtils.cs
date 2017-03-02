@@ -1,3 +1,10 @@
+/**
+ * ReflectionUtils class
+ * Copyright(c) 2017 Steve Westbrook
+ * MIT Licensed
+ */
+
+using System;
 using System;
 using System.Reflection;
 using System.Globalization;
@@ -8,6 +15,9 @@ using System.Collections.Concurrent;
 
 namespace EdgeReference
 {
+	/// <summary>
+	/// Contains tools that describe .NET code metadata.
+	/// </summary>
 	public class ReflectionUtils
 	{
     public static bool IsReferenceType(Type type) {

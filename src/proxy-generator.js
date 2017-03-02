@@ -8,6 +8,18 @@ const edge = require('edge');
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * Generates a proxy to a specified .NET object and any objects it depends on, 
+ * either through inheritance or reference.  
+ * 
+ * @param input {object} Takes three parameters:
+ *        typeFullName The name, including namespace of the type to be proxied.
+ *        assemblyLocation The location of the assembly file that contains 
+ *                         the type.
+ *        callback A callback which is trigered each time a type proxy is 
+ *                 generated.  It provides an output parameter with name and 
+ *                 script members.
+ */
 const proxyGenerator = edge.func(function() {
   /*
     #r "./dotnet/bin/Debug/EdgeReference.dll"

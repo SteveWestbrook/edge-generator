@@ -1,3 +1,10 @@
+/**
+ * ReferenceManager class
+ * Copyright(c) 2017 Steve Westbrook
+ * MIT Licensed
+ */
+
+using System;
 using System;
 using System.Threading;
 using System.Collections.Generic;
@@ -63,6 +70,14 @@ namespace EdgeReference
     }
 
     // TODO: All dictionary modifications should be thread-safe
+
+    public long Count
+    {
+      get
+      {
+        return this.referencesById.Count;
+      }
+    }
 
     public long EnsureReference(object reference)
     {

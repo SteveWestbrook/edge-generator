@@ -1,3 +1,9 @@
+/**
+ * ProxyGenerator class
+ * Copyright(c) 2017 Steve Westbrook
+ * MIT Licensed
+ */
+
 using System;
 using System.Reflection;
 using System.Globalization;

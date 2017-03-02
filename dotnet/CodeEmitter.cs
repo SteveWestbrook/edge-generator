@@ -1,3 +1,9 @@
+/**
+ * CodeEmitter class
+ * Copyright(c) 2017 Steve Westbrook
+ * MIT Licensed
+ */
+
 using System;
 using System.Text;
 using System.Globalization;
