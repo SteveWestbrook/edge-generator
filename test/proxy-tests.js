@@ -346,31 +346,4 @@ describe('TestType1', () => {
     });
   });
 
-  // TODO: Unclear whether weak references are not working properly or objects are really not GC'd.
-  describe('#referenceManager', () => {
-    it('should clean up unused resources', (done) => {
-      var beforeCount = ReferenceCount(null, true);
-      var i = 0;
-      var parent = {};
-
-      while (++i < 1000) {
-        parent.tt1 = new TestType1();
-        var afterCount = ReferenceCount(null, true);
-
-        assert.ok(afterCount);
-        assert.notEqual(afterCount, beforeCount);
-
-        delete parent.tt1;
-      }
-
-      setTimeout(() => {
-        var lastCount = ReferenceCount(null, true);
-        console.log(lastCount);
-        console.log(beforeCount);
-        console.log(afterCount);
-        assert.ok(lastCount <= beforeCount);
-        done();
-      }, 1000);
-    });
-  });
 });

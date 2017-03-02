@@ -11,7 +11,8 @@
     "mocha": "^3.2.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha && npm run test-gc",
+	"test-gc": "node --expose-gc test-gc.js"
   },
   "keywords": [],
   "author": "Steven Westbrook <StevenAWestbrook@gmail.com>",
