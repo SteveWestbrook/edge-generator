@@ -31,13 +31,13 @@ while (++i < 1000) {
   delete parent.tt1;
 }
 
+global.gc();
+
 setTimeout(() => {
-  global.gc();
   var lastCount = ReferenceCount(null, true);
   console.log(lastCount);
   console.log(beforeCount);
   console.log(afterCount);
   assert.ok(lastCount <= beforeCount);
-  done();
 }, 1000);
 
