@@ -4,9 +4,15 @@
  * MIT Licensed
  */
 
+'use strict';
+
 const edge = require('edge');
 const fs = require('fs');
 const path = require('path');
+
+module.exports = {
+  generate: generateProxy
+};
 
 /**
  * Generates a proxy to a specified .NET object and any objects it depends on, 
@@ -55,10 +61,6 @@ const proxyGenerator = edge.func(function() {
     }
   */
 });
-
-module.exports = {
-  generate: generateProxy
-};
 
 function generateProxy(typeName, assemblyPath, targetDirectory, callback) {
   var parameters = {

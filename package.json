@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "edge-generator": "bin/edge-generator.bin.js"
+  },
   "dependencies": {
     "edge": "^6.5.1",
+    "node-args": "^1.0.2",
     "weak": "^1.0.1"
   },
   "devDependencies": {
@@ -12,7 +16,7 @@
   },
   "scripts": {
     "test": "mocha && npm run test-gc",
-	"test-gc": "node --expose-gc test-gc.js"
+    "test-gc": "node --expose-gc test-gc.js"
   },
   "keywords": [],
   "author": "Steven Westbrook <StevenAWestbrook@gmail.com>",
