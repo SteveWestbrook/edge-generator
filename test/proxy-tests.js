@@ -1,3 +1,11 @@
+/**
+ * Tests of auto-generated proxies
+ * Copyright(c) 2017 Steve Westbrook
+ * MIT Licensed
+ */
+
+'use strict';
+
 const TestType1 = require('./DotNetTest-TestType1.js');
 const TestType2 = require('./DotNetTest-TestType2.js');
 const assert = require('assert');
@@ -319,18 +327,23 @@ describe('TestType1', () => {
     it('can return itself asynchronously', (done) => {
       var tt1 = new TestType1();
       tt1.ReturnSelf((err, result) => {
+        console.log('2222');
         assert.ok(!err);
         assert.equal(result._referenceId, tt1._referenceId);
         done();
       });
+
+      console.log('1111');
     });
 
     // Note: synchronous support not present atm
-    // it('can return itself synchronously', () => {
-      // var tt1 = new TestType1();
-      // var copy = tt1.ReturnSelf(true);
-      // assert.equal(copy._referenceId, tt1._referenceId);
-    // });
+    /*
+    it('can return itself synchronously', () => {
+      var tt1 = new TestType1();
+      var copy = tt1.ReturnSelf(true);
+      assert.equal(copy._referenceId, tt1._referenceId);
+    });
+    */
   });
 
   describe('#ReturnTarget', () => {

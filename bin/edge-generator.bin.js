@@ -7,7 +7,7 @@
 
 'use strict';
 
-const generator = require('../src/proxy-generator.js');
+const generator = require('../index.js');
 const process = require('process');
 const path = require('path');
 const args = require('node-args');

@@ -63,11 +63,16 @@ const proxyGenerator = edge.func(function() {
 });
 
 function generateProxy(typeName, assemblyPath, targetDirectory, callback) {
+
+  // parameters to be passed to the proxy generator
   var parameters = {
     typeFullName: typeName,
     assemblyLocation: assemblyPath,
+
+    // Annoying non-standard callback from edge
     callback: (result) => {
 
+      // There should always be a result
       if (!result) {
         console.error('Error - proxy generation returned invalid result.')
         return;
@@ -78,22 +83,26 @@ function generateProxy(typeName, assemblyPath, targetDirectory, callback) {
       var writePath = path.join(
         targetDirectory,
         result.name.replace('.', '-') + '.js');
+
       var stream = fs.createWriteStream(writePath);
 
+      // Problem
+      stream.on('error', (err) => {
+        console.error('Failed to write to %s:', writePath);
+        console.error(err);
+      });
+    
+      // Open a file and write the new script into it
       stream.on('open', () => {
         stream.write(result.script, 'utf8', () => {
           stream.end();
           console.log('Finished writing to %s.', writePath);
         });
       });
-
-      stream.on('error', (err) => {
-        console.error('Failed to write to %s:', writePath);
-        console.error(err);
-      });
     }
   }
 
+  // Generate proxy
   proxyGenerator(parameters, (err) => {
     if (err) {
       console.error(err);
