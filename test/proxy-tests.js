@@ -327,13 +327,13 @@ describe('TestType1', () => {
     it('can return itself asynchronously', (done) => {
       var tt1 = new TestType1();
       tt1.ReturnSelf((err, result) => {
-        console.log('2222');
         assert.ok(!err);
         assert.equal(result._referenceId, tt1._referenceId);
+        assert.equal(testValue, 123);
         done();
       });
 
-      console.log('1111');
+      var testValue = 123;
     });
 
     // Note: synchronous support not present atm

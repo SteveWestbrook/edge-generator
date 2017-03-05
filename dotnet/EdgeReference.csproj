@@ -43,6 +43,7 @@
     <Compile Include="ReflectionUtils.cs" />
     <Compile Include="DotNetEmitter.cs" />
     <Compile Include="CodeEmitter.cs" />
+    <Compile Include="ReferenceComparer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

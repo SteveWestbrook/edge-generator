@@ -5,7 +5,6 @@
  */
 
 using System;
-using System;
 using EdgeReference;
 using NUnit.Framework;
 using DotNetTest;
@@ -29,7 +28,7 @@ namespace EdgeReference.Test
 		[Test]
 		public void AppendClassStartTest() {
 			string expected = 
-				"public static class TestType1Proxy" +
+				"public class TestType1Proxy" +
 				Environment.NewLine +
 				"{" +
 				Environment.NewLine;
@@ -60,7 +59,7 @@ namespace EdgeReference.Test
 			DotNetEmitter emitter = new DotNetEmitter(target);
 
 			string expected = 
-				"public static async Task<object> Get_Name(object _referenceId)" +
+				"public async Task<object> Get_Name(object _referenceId)" +
 				Environment.NewLine +
 				"{" + Environment.NewLine + 
 				"    DotNetTest.TestType1 _parent = " + 
@@ -87,16 +86,18 @@ namespace EdgeReference.Test
 			DotNetEmitter emitter = new DotNetEmitter(target);
 
 			string expected = 
-				"public static async Task<object> Get_Child(object _referenceId)" +
+				"public async Task<object> Get_Child(object _referenceId)" +
 				Environment.NewLine +
 				"{" + Environment.NewLine + 
+				"    long _refId = _referenceId is long ? (long)_referenceId : (long)(int)_referenceId;" +
+				Environment.NewLine + Environment.NewLine + 
 				"    DotNetTest.TestType1 _parent = " + 
 				"(DotNetTest.TestType1)" + 
-				"ReferenceManager.Instance.PullReference(_referenceId);" +
+				"ReferenceManager.Instance.PullReference(_refId);" +
 				Environment.NewLine + 
 				"    DotNetTest.TestType2 _result = _parent.Child;" +
 				Environment.NewLine +
-				"    return ReferenceManager.EnsureReference(_result);" + 
+				"    return ReferenceManager.Instance.EnsureReference(_result);" + 
 				Environment.NewLine +
 				"}" + Environment.NewLine;
 
@@ -115,7 +116,7 @@ namespace EdgeReference.Test
 			DotNetEmitter emitter = new DotNetEmitter(target);
 
 			string expected = 
-				"public static async Task<object> Get_SharedData()" +
+				"public async Task<object> Get_SharedData()" +
 				Environment.NewLine +
 				"{" + Environment.NewLine + 
 				"    System.String _result = DotNetTest.TestType1.SharedData;" +
@@ -138,7 +139,7 @@ namespace EdgeReference.Test
 			DotNetEmitter emitter = new DotNetEmitter(target);
 
 			string expected = 
-				"public static async Task Set_Name(dynamic parameters)" +
+				"public async Task Set_Name(dynamic parameters)" +
 				Environment.NewLine +
 				"{" + Environment.NewLine +
 				"    DotNetTest.TestType1 _parent = " + 

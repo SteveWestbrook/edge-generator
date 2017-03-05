@@ -38,8 +38,8 @@ It is possible to rename generated files after generation.
 
 When deploying proxy files, the .NET assemblies referenced by them must also be deployed, in the node project's root folder.
 
-## Limitations
-Several features of the .NET framework and the C# language are not supported at this time.  Notable missing features are below:
+## Notable Limitations
+Several features of the .NET framework and the C# language are not supported at this time.  A non-exhaustive list is below:
 
   * Constructor parameters - At the moment, only parameterless constructors are supported.
   * Overloaded members - Due to limitations of the JavaScript language, overloading is not directly possible in these proxies.  Solutions are being investigated.
@@ -48,7 +48,7 @@ Several features of the .NET framework and the C# language are not supported at 
   * optional arguments - Generated proxies receive a callback as the last argument.  For this reason, default values should be explicitly supplied for optional arguments.
 
 ## Disclaimer
-This package is in no way affiliated with the edge.js package.
+The author of this package is in no way affiliated with the edge.js package.
 
 ## Dedication
 Dedicated to Dorothy Gant (1925-2017)
