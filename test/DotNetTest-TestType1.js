@@ -122,7 +122,6 @@ using EdgeReference;
 public class Startup
 {
     public async Task Set_Name(dynamic parameters)
-
     {
         long _refId = parameters._referenceId is long ? (long)parameters._referenceId : (long)(int)parameters._referenceId;
 

@@ -31,21 +31,23 @@ namespace EdgeReference.Test
       string expected = 
         "CreateNewT2(template, description, callback) {" + 
         Environment.NewLine + 
-        "    template = template ? template._edgeId : 0;" + 
+        "    template = template ? template._referenceId : 0;" + 
         Environment.NewLine + 
         Environment.NewLine + 
-        "    var result = Reference.CreateNewT2({" +
+        "    return EdgeReference.callbackOrReturn(" +
+        Environment.NewLine +
+        "        CreateNewT2," + Environment.NewLine + 
+        "        {" + Environment.NewLine +
+        "            _referenceId: this._referenceId," + 
         Environment.NewLine + 
-        "        _referenceId: _referenceId," + 
+        "            template: template," +
         Environment.NewLine + 
-        "        template: template," +
+        "            description: description" + 
         Environment.NewLine + 
-        "        description: description" + 
+        "        }," + 
         Environment.NewLine + 
-        "    }, callback);" + 
-        Environment.NewLine + 
-        "    return new TestType2(result);" +
-        Environment.NewLine + 
+        "        TestType2," + Environment.NewLine + 
+        "        callback);" + Environment.NewLine + 
         "}";
 
       Assert.AreEqual(expected, output);

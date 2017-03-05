@@ -15,14 +15,38 @@ using System.IO;
 
 namespace EdgeReference
 {
+  /// <summary>
+  /// This class emits C# code used in the construction of a JavaScript proxy 
+  /// for a .NET type.
+  /// </summary>
   public class DotNetEmitter : CodeEmitter
   {
+    /// <summary>
+    /// The type being used to build the proxy.
+    /// </summary>
     private Type source;
 
+    /// <summary>
+    /// Assemblies that have already been referenced in emitted code.
+    /// </summary>
     private Dictionary<string, bool> referencedAssemblies;
 
+    /// <summary>
+    /// Namespaces that have already been referenced in emitted code.
+    /// </summary>
     private Dictionary<string, bool> referencedNamespaces;
 
+    /// <summary>
+    /// Creates and initializes a new instance of the DotNetEmitter.
+    /// </summary>
+    /// <param name="source">
+    /// The type for which proxy code will be emitted.
+    /// </param>
+    /// <param name="existingBuffer">
+    /// If .NET code is being emitted into an existing file, this buffer can 
+    /// be supplied.  Otherwise, exclude this value and a new buffer will be 
+    /// created.
+    /// </param>
     public DotNetEmitter(Type source, StringBuilder existingBuffer = null)
     {
       this.referencedAssemblies = new Dictionary<string, bool>();
@@ -30,7 +54,9 @@ namespace EdgeReference
       this.source = source;
 
       // Can optionally supply a buffer that has already been initialized.
-      if (existingBuffer != null) {
+      if (existingBuffer == null) {
+        this.buffer = new StringBuilder();
+      } else {
         this.buffer = existingBuffer;
       }
     }
@@ -105,6 +131,10 @@ namespace EdgeReference
 
     #region Namespace
 
+    /// <summary>
+    /// Appends the opening of a namespace corresponding to the type's 
+    /// namespace.
+    /// </summary>
     public void AppendNamespace()
     {
       const string NamespaceTemplate = "namespace EdgeReference.{0}";
@@ -120,6 +150,9 @@ namespace EdgeReference
       this.Indent();
     }
 
+    /// <summary>
+    /// Appends the close of a namespace corresponding to the type's namespace.
+    /// </summary>
     public void AppendNamespaceEnd() 
     {
       this.Outdent();
@@ -130,6 +163,13 @@ namespace EdgeReference
 
     #region Class
 
+    /// <summary>
+    /// Appends the opening of the proxy class.
+    /// </summary>
+    /// <param name="className">
+    /// The name of the class to be emitted; if not included, uses the name of 
+    /// the source type, plus the string "Proxy".
+    /// </param>
     public void AppendClassStart(string className = null) 
     {
       className = className ?? (this.source.Name + "Proxy");
@@ -147,6 +187,9 @@ namespace EdgeReference
       this.BlockStart();
     }
 
+    /// <summary>
+    /// Appends the closing of a class.
+    /// </summary>
     public void AppendClassEnd()
     {
       this.BlockEnd();
@@ -156,6 +199,12 @@ namespace EdgeReference
 
     #region Edge functions
 
+    /// <summary>
+    /// Appends the opening of an edge.js standard function.
+    /// </summary>
+    /// <param name="name">
+    /// The name of the function in JavaScript code.
+    /// </param>
     public void AppendEdgeFuncStart(string name) {
       const string EdgeFuncTemplate = 
         "var {0} = edge.func({{ source: () => {{/*";
@@ -168,6 +217,12 @@ namespace EdgeReference
       this.buffer.AppendLine();
     }
 
+    /// <summary>
+    /// Appends the closing of an edge.js standard function.
+    /// </summary>
+    /// <param name="methodName">
+    /// The name of the function in C# code.
+    /// </param>
     public void AppendEdgeFuncEnd(string methodName) {
       if (string.IsNullOrWhiteSpace(methodName)) {
         this.buffer.AppendLine("*/}});");
@@ -192,6 +247,12 @@ namespace EdgeReference
 
     #region Constructors
 
+    /// <summary>
+    /// Appends the closing of an edge.js standard function.
+    /// </summary>
+    /// <param name="methodName">
+    /// The name of the function in C# code.
+    /// </param>
     public void AppendStandaloneConstructors(ConstructorInfo[] constructors)
     {
       for (var i=0; i<constructors.Length; i++) {
@@ -408,14 +469,13 @@ namespace EdgeReference
       }
 
       const string SignatureTemplate = 
-        "{0}public async Task Set_{1}(dynamic parameters){2}";
+        "{0}public async Task Set_{1}(dynamic parameters)";
 
       this.buffer.AppendFormat(
         CultureInfo.InvariantCulture,
         SignatureTemplate,
         this.CurrentIndent,
-        info.Name,
-        Environment.NewLine);
+        info.Name);
 
       const string setLineTemplate = "{0}.{1} = parameters.value;";
       string setLine = string.Format(
