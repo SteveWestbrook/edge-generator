@@ -12,15 +12,12 @@ using System.Text;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using NUnit.Core;
 
-namespace EdgeReference
+namespace EdgeGenerator
 {
   public class ProxyGenerator
   {
     private static ConcurrentDictionary<string, string> generatedProxies = new ConcurrentDictionary<string, string>();
-
-    private Dictionary<string, List<MemberInfo>> generatedMembers;
 
     private Action<string, string> classGenerated;
 

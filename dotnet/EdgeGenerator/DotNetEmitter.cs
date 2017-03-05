@@ -5,15 +5,15 @@
  */
 
 using System;
-using System;
 using System.Linq;
 using System.Reflection;
 using System.Globalization;
 using System.Text;
 using System.Collections.Generic;
 using System.IO;
+using EdgeReference;
 
-namespace EdgeReference
+namespace EdgeGenerator
 {
   /// <summary>
   /// This class emits C# code used in the construction of a JavaScript proxy 

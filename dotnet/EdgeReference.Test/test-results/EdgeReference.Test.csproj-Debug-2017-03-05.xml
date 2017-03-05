@@ -81,6 +81,21 @@
 
 Execution time: 0.13ms</Message>
     </UnitTestResult>
+    <UnitTestResult>
+      <TestDate>2017-03-05T11:23:34</TestDate>
+      <Status />
+      <Passed>0</Passed>
+      <Errors>0</Errors>
+      <Failures>0</Failures>
+      <Inconclusive>0</Inconclusive>
+      <NotRunnable>0</NotRunnable>
+      <Skipped>0</Skipped>
+      <Ignored>0</Ignored>
+      <Time />
+      <Message>Test successful
+
+Execution time: 0.01ms</Message>
+    </UnitTestResult>
   </Results>
   <Tests>
     <TestRecord Name="EdgeReference">
@@ -446,6 +461,7 @@ Execution time: 0.01ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendClassEndTest">
                   <Results>
@@ -552,6 +568,7 @@ Execution time: 0.01ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendClassStartTest">
                   <Results>
@@ -658,6 +675,7 @@ Execution time: 0.00ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendInstanceComplexGetterTest">
                   <Results>
@@ -764,6 +782,7 @@ Execution time: 0.00ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendInstanceComplexSetterTest">
                   <Results>
@@ -870,6 +889,7 @@ Execution time: 0.00ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendInstancePrivateSetterTest">
                   <Results>
@@ -976,6 +996,7 @@ Execution time: 0.00ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendInstanceSimpleGetterTest">
                   <Results>
@@ -1089,6 +1110,7 @@ Execution time: 0.00ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendInstanceSimpleSetterTest">
                   <Results>
@@ -1209,6 +1231,7 @@ Execution time: 0.00ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendStaticSimpleGetterTest">
                   <Results>
@@ -1322,6 +1345,7 @@ Execution time: 0.00ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendStaticSimpleSetterTest">
                   <Results>
@@ -1428,6 +1452,7 @@ Execution time: 0.00ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
               </Tests>
             </TestRecord>
@@ -1620,6 +1645,7 @@ Execution time: 0.00ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
                 <TestRecord Name="AppendFunctionWithComplexResultAndComplexArgumentTest">
                   <Results>
@@ -1761,6 +1787,7 @@ Execution time: 0.01ms</Message>
                       <ConsoleError />
                     </UnitTestResult>
                   </Results>
+                  <Tests />
                 </TestRecord>
               </Tests>
             </TestRecord>

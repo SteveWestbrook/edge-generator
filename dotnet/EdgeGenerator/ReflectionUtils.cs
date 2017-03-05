@@ -5,7 +5,6 @@
  */
 
 using System;
-using System;
 using System.Reflection;
 using System.Globalization;
 using System.Linq;
@@ -13,7 +12,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-namespace EdgeReference
+namespace EdgeGenerator
 {
 	/// <summary>
 	/// Contains tools that describe .NET code metadata.

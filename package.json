@@ -15,8 +15,9 @@
     "mocha": "^3.2.0"
   },
   "scripts": {
-    "test": "mocha && npm run test-gc",
-    "test-gc": "node --expose-gc test-gc.js"
+    "test": "npm run build && mocha && npm run test-gc",
+    "test-gc": "node --expose-gc test-gc.js",
+	"build": "./edge-reference-build.sh && ./edge-generator-build.sh"
   },
   "keywords": [],
   "author": "Steven Westbrook <StevenAWestbrook@gmail.com>",

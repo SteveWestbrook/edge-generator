@@ -10,7 +10,7 @@ using NUnit.Framework;
 using DotNetTest;
 using System.Reflection;
 
-namespace EdgeReference.Test
+namespace EdgeGenerator.Test
 {
 	[TestFixture]
 	public class DotNetEmitterTest

@@ -5,7 +5,6 @@
  */
 
 using System;
-using System;
 using System.Reflection;
 using System.Globalization;
 using System.Linq;
@@ -13,7 +12,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-namespace EdgeReference
+namespace EdgeGenerator
 {
   public class JavaScriptEmitter : CodeEmitter
   {
@@ -49,17 +48,6 @@ namespace EdgeReference
 {0}}}";
 
   private Dictionary<string, bool> appended = new Dictionary<string, bool>();
-
-    /// <summary>
-    /// The name of the JavaScript class.
-    /// </summary>
-    private string javaScriptClassName;
-
-    /// <summary>
-    /// The source type's full name with &quot.&quot; replaced with 
-    /// &quot-&quot;.  Intended for use as a file name.
-    /// </summary>
-    private string javaScriptFullName;
 
     #region .Net Wrapping
 
@@ -413,7 +401,6 @@ namespace EdgeReference
       const string FunctionCallLineTemplate =
         "{0}{1}EdgeReference.callbackOrReturn({2}{3},{2}{4},{2}{5},{2}callback);";
 
-      string referenceParameter;
       IEnumerable<string> argumentContent = arguments.Select(parameter => {
         return string.Concat(
           parameter.Name,

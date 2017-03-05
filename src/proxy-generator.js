@@ -28,11 +28,13 @@ module.exports = {
  */
 const proxyGenerator = edge.func(function() {
   /*
-    #r "./dotnet/bin/Debug/EdgeReference.dll"
+    #r "EdgeReference.dll"
+    #r "EdgeGenerator.dll"
 
     using System;
     using System.Threading.Tasks;
     using EdgeReference;
+    using EdgeGenerator;
 
     public class Startup {
       private class Result

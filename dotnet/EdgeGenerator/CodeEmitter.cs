@@ -8,7 +8,7 @@ using System;
 using System.Text;
 using System.Globalization;
 
-namespace EdgeReference
+namespace EdgeGenerator
 {
 	public class CodeEmitter
 	{
