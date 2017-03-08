@@ -108,7 +108,7 @@ namespace EdgeGenerator
         CultureInfo.InvariantCulture,
         "const {0} = require('./{1}.js');",
         name,
-        ReflectionUtils.ConvertFullName(type.FullName));
+        ReflectionUtils.ConvertFullName(type.FullName ?? type.Name));
 
       buffer.AppendLine();
     }
@@ -126,7 +126,7 @@ namespace EdgeGenerator
       // If this class inherits from something, so should the proxy.
       // TODO: Look up type names here
       string baseClass =
-        (target.BaseType != typeof(object)) 
+        (target.BaseType != null && target.BaseType != typeof(object)) 
         ? target.BaseType.Name
         : EdgeReferenceTypeName;
 

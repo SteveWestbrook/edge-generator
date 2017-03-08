@@ -12,8 +12,9 @@ const assert = require('assert');
 const process = require('process');
 const edge = require('edge');
 
-var ReferenceCount = edge.func({ source: () => {/*
-  #r "./dotnet/bin/Debug/EdgeReference.dll"
+var ReferenceCount = edge.func({ source: () => {
+/*
+  #r "./bin/EdgeReference.dll"
 
   using System.Threading.Tasks;
 

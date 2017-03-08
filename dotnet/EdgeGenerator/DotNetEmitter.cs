@@ -417,7 +417,10 @@ namespace EdgeGenerator
     {
       this.AppendEdgeFuncStart(funcName);
 
-      this.AppendReferenceFor(typeof(ReferenceManager));
+      this.AppendReferenceFor(
+        typeof(ReferenceManager),
+        "./node_modules/edge-reference/bin/");
+
       this.AppendReferenceFor(this.source);
 
       // Return and parameter type references

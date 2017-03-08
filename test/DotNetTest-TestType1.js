@@ -3,7 +3,7 @@ const EdgeReference = require('edge-reference');
 const TestType2 = require('./DotNetTest-TestType2.js');
 
 var Constructor = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ public class Startup
 });
 
 var Get_SharedData = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -44,7 +44,7 @@ public class Startup
 });
 
 var Set_SharedData = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -54,7 +54,6 @@ using EdgeReference;
 public class Startup
 {
     public async Task Set_SharedData(dynamic parameters)
-
     {
         DotNetTest.TestType1.SharedData = parameters.value;
     }
@@ -65,7 +64,7 @@ public class Startup
 });
 
 var Get_Child = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 
 using System.Threading.Tasks;
@@ -88,7 +87,7 @@ public class Startup
 });
 
 var Get_Name = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -112,7 +111,7 @@ public class Startup
 });
 
 var Set_Name = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -135,7 +134,7 @@ public class Startup
 });
 
 var Get_Sibling = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 
 using System.Threading.Tasks;
@@ -158,7 +157,7 @@ public class Startup
 });
 
 var Set_Sibling = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 
 using System.Threading.Tasks;
@@ -167,7 +166,6 @@ using EdgeReference;
 public class Startup
 {
     public async Task Set_Sibling(dynamic parameters)
-
     {
         long _refId = parameters._referenceId is long ? (long)parameters._referenceId : (long)(int)parameters._referenceId;
 
@@ -183,7 +181,7 @@ public class Startup
 });
 
 var CreateT2Static = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 
 using System.Threading.Tasks;
@@ -205,7 +203,7 @@ public class Startup
 });
 
 var CreateT2StaticTemplate = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 
 using System.Threading.Tasks;
@@ -229,7 +227,7 @@ public class Startup
 });
 
 var IncreaseCount = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -251,7 +249,7 @@ public class Startup
 });
 
 var UpdateName = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -275,7 +273,7 @@ public class Startup
 });
 
 var AssignChild = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -302,7 +300,7 @@ public class Startup
 });
 
 var AssignName = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -327,7 +325,7 @@ public class Startup
 });
 
 var AssignT2Description = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -354,7 +352,7 @@ public class Startup
 });
 
 var CreateNewT2 = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -382,7 +380,7 @@ public class Startup
 });
 
 var DuplicateName = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -407,7 +405,7 @@ public class Startup
 });
 
 var ReturnSelf = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 
 using System.Threading.Tasks;
@@ -432,7 +430,7 @@ public class Startup
 });
 
 var ReturnTarget = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 
 using System.Threading.Tasks;

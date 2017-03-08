@@ -164,7 +164,7 @@ namespace EdgeGenerator
       this.OnClassGenerated(target, this.emitter.ToString());
 
       // After generation, look at base classes
-      if (target.BaseType != typeof(object)) {
+      if (target.BaseType != null && target.BaseType != typeof(object)) {
         this.GenerateProxy(target.BaseType);
       }
 

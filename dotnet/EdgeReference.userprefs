@@ -1,13 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="ReferenceComparer.cs">
+    <Files>
+      <File FileName="ReferenceComparer.cs" Line="24" Column="5" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="DotNetTest" expanded="True">
-            <Node name="TestType1.cs" selected="True" />
+          <Node name="DotNetTest" expanded="True" />
+          <Node name="EdgeGenerator" expanded="True" />
+          <Node name="EdgeGenerator.Test" expanded="True" />
+          <Node name="EdgeReference" expanded="True">
+            <Node name="ReferenceComparer.cs" selected="True" />
           </Node>
-          <Node name="EdgeReference" expanded="True" />
           <Node name="EdgeReference.Test" expanded="True" />
         </State>
       </Pad>
@@ -18,15 +23,7 @@
         <State />
       </Pad>
       <Pad Id="MonoDevelop.NUnit.TestPad">
-        <State expanded="True">
-          <Node name="EdgeReference.Test" expanded="True">
-            <Node name="EdgeReference" expanded="True">
-              <Node name="Test" expanded="True">
-                <Node name="JavaScriptEmitterTest" selected="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
+        <State expanded="True" selected="True" />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>

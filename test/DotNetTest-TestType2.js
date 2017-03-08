@@ -2,7 +2,7 @@ const edge = require('edge');
 const EdgeReference = require('edge-reference');
 
 var Constructor = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 
 using System.Threading.Tasks;
@@ -22,7 +22,7 @@ public class Startup
 });
 
 var Get_Description = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -46,7 +46,7 @@ public class Startup
 });
 
 var Set_Description = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -56,7 +56,6 @@ using EdgeReference;
 public class Startup
 {
     public async Task Set_Description(dynamic parameters)
-
     {
         long _refId = parameters._referenceId is long ? (long)parameters._referenceId : (long)(int)parameters._referenceId;
 
@@ -70,7 +69,7 @@ public class Startup
 });
 
 var Get_Status = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -94,7 +93,7 @@ public class Startup
 });
 
 var Set_Status = edge.func({ source: () => {/*
-#r "EdgeReference.dll"
+#r "./node_modules/edge-reference/bin/EdgeReference.dll"
 #r "DotNetTest.dll"
 #r "mscorlib.dll"
 
@@ -104,7 +103,6 @@ using EdgeReference;
 public class Startup
 {
     public async Task Set_Status(dynamic parameters)
-
     {
         long _refId = parameters._referenceId is long ? (long)parameters._referenceId : (long)(int)parameters._referenceId;
 

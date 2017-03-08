@@ -17,7 +17,7 @@ const process = require('process');
  * Gets a count of references currently stored in .NET, made available to JS
  */
 var ReferenceCount = edge.func({ source: () => {/*
-  #r "./dotnet/bin/Debug/EdgeReference.dll"
+  #r "./bin/EdgeReference.dll"
 
   using System.Threading.Tasks;
 
