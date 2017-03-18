@@ -54,11 +54,6 @@ setTimeout(() => {
   // See how many references are now present
   var lastCount = ReferenceCount(null, true);
 
-  // Just a little feedback
-  console.log(lastCount);
-  console.log(beforeCount);
-  console.log(afterCount);
-
   // Make sure that the current number of references matches the number we  
   // started with. 
   assert.ok(lastCount <= beforeCount);

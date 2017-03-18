@@ -18,6 +18,14 @@ const args = require('node-args');
  * 
  */
 
+if (args.h || args.help) {
+  console.log('\tedge-generator  -a <assembly> [-t <target directory>] Namespace.Class1 Namespace.Class2');
+  console.log('\n-a\tAn assembly path relative to the execution location of the generator');
+  console.log('\n-t\tAn output directory for the generated proxy classes.');
+
+  return;
+}
+
 if (!args.a) {
   console.error('No assembly specified.');
   return;

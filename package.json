@@ -6,6 +6,9 @@
   "bin": {
     "edge-generator": "bin/edge-generator.bin.js"
   },
+  "bugs": {
+    "url": "https://github.com/SteveWestbrook/edge-generator/issues"
+  },
   "dependencies": {
     "edge": "^6.5.1",
     "node-args": "^1.0.2",
@@ -17,16 +20,40 @@
 	"files": [
 		"index.js",
 		"src/",
-		"bin/"
+		"script/",
+		"bin/",
+		"LICENSE",
+		"README.md"
 	],
+	"homepage": "https://github.com/SteveWestbrook/edge-generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SteveWestbrook/edge-generator.git"
+  },
   "scripts": {
     "test": "npm run build && mocha && npm run test-gc",
     "test-gc": "node --expose-gc test-gc.js",
-	"build": "./edge-generator-build.sh",
+	"build": "node ./script/edge-generator-build.js",
 	"prestart": "npm run build",
 	"prepublish": "npm run build"
   },
-  "keywords": [],
+  "keywords": [
+		"edge",
+		"c#",
+		"net",
+		".net",
+		"mono",
+		"csharp",
+		"managed",
+		"reference",
+		"edge-reference",
+		"integration",
+		"callback",
+		"clr",
+		"proxy",
+		"generator",
+		"code"
+	],
   "author": "Steven Westbrook <StevenAWestbrook@gmail.com>",
   "license": "MIT"
 }

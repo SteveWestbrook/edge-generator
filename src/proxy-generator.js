@@ -14,6 +14,8 @@ module.exports = {
   generate: generateProxy
 };
 
+const bindir = path.resolve(__dirname, '../bin');
+
 /**
  * Generates a proxy to a specified .NET object and any objects it depends on, 
  * either through inheritance or reference.  
@@ -26,10 +28,10 @@ module.exports = {
  *                 generated.  It provides an output parameter with name and 
  *                 script members.
  */
-const proxyGenerator = edge.func(function() {
-  /*
-    #r "./bin/EdgeReference.dll"
-    #r "./bin/EdgeGenerator.dll"
+const proxyGenerator = edge.func(
+  `
+    #r "${bindir}/EdgeReference.dll"
+    #r "${bindir}/EdgeGenerator.dll"
 
     using System;
     using System.Threading.Tasks;
@@ -61,8 +63,8 @@ const proxyGenerator = edge.func(function() {
         return null;
       }
     }
-  */
-});
+  `
+);
 
 function generateProxy(typeName, assemblyPath, targetDirectory, callback) {
 
@@ -108,8 +110,6 @@ function generateProxy(typeName, assemblyPath, targetDirectory, callback) {
   proxyGenerator(parameters, (err) => {
     if (err) {
       console.error(err);
-    } else {
-      console.log('Proxy generation complete for %s.', typeName);
     }
 
     if (callback) {
