@@ -9,6 +9,7 @@ using EdgeReference;
 using NUnit.Framework;
 using DotNetTest;
 using System.Reflection;
+using EdgeGenerator;
 
 namespace EdgeGenerator.Test
 {

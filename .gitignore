@@ -2,9 +2,10 @@ node_modules/
 junk/
 plato/
 notes
-*.dll
-*.exe
-*.mdb
-*.sw*
-tags
+**.dll
+**.exe
+**.mdb
+**.*.sw*
+**tags
 README.html
+**/TestResults.xml
