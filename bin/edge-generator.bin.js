@@ -32,7 +32,7 @@ if (!args.a) {
 }
 
 var directory = process.cwd();
-var assembly = path.resolve(directory, args.a);
+var assembly = path.resolve(args.a);
 var writedirectory;
 
 if (args.t) {

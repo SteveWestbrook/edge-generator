@@ -453,7 +453,12 @@ namespace EdgeGenerator
       else
       {
         returnStatement = "return ";
-        wrapperType = source.ReturnType.Name;
+
+        if (ReflectionUtils.IsReferenceType(source.ReturnType)) {
+          wrapperType = source.ReturnType.Name;
+        } else {
+          wrapperType = "null";
+        }
       }
 
       return string.Format(

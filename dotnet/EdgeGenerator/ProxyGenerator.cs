@@ -12,6 +12,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace EdgeGenerator
 {
@@ -52,8 +53,10 @@ namespace EdgeGenerator
         Assembly owningAssembly = Assembly.ReflectionOnlyLoadFrom(assemblyPath);
         Type type = owningAssembly.GetType(typeNameWithNamespace);
 
+        FileInfo assemblyFile = new FileInfo(assemblyPath);
+
         generator.classGenerated = classGeneratedCallback;
-        generator.Generate(type);
+        generator.Generate(type, assemblyFile.Directory.FullName);
       } catch (Exception ex) {
         Console.WriteLine("Error during generation: ");
         Console.WriteLine(ex.ToString());
@@ -61,10 +64,11 @@ namespace EdgeGenerator
       }
     }
 
-    private void Generate(Type target)
+    private void Generate(Type target, string assemblyDirectory)
     {
       this.emitter = new JavaScriptEmitter();
       this.dotNetEmitter = new DotNetEmitter(target, this.emitter.Buffer);
+      this.dotNetEmitter.ExecutionBasePath = assemblyDirectory;
 
       ConstructorInfo[] constructors = target.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
 

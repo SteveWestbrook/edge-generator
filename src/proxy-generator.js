@@ -82,8 +82,6 @@ function generateProxy(typeName, assemblyPath, targetDirectory, callback) {
         return;
       }
 
-      console.log('Generated proxy for %s.', result.name);
-
       var writePath = path.join(
         targetDirectory,
         result.name.replace('.', '-') + '.js');
@@ -100,7 +98,7 @@ function generateProxy(typeName, assemblyPath, targetDirectory, callback) {
       stream.on('open', () => {
         stream.write(result.script, 'utf8', () => {
           stream.end();
-          console.log('Finished writing to %s.', writePath);
+          console.log('Generated proxy for %s.', result.name);
         });
       });
     }

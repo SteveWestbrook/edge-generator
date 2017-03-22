@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="/home/westbrook/prog/edge-generator/dotnet/EdgeGenerator.Test/bin/EdgeGenerator.Test.dll" total="12" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2017-03-21" time="12:20:00">
+  <environment nunit-version="2.6.3.0" clr-version="4.0.30319.17020" os-version="Unix 3.16.0.4" platform="Unix" cwd="/home/westbrook/prog/edge-generator/dotnet/EdgeGenerator.Test" machine-name="burlington" user="westbrook" user-domain="burlington" />
+  <culture-info current-culture="en-CA" current-uiculture="en-CA" />
+  <test-suite type="Assembly" name="/home/westbrook/prog/edge-generator/dotnet/EdgeGenerator.Test/bin/EdgeGenerator.Test.dll" executed="True" result="Success" success="True" time="0.076" asserts="0">
+    <results>
+      <test-suite type="Namespace" name="EdgeGenerator" executed="True" result="Success" success="True" time="0.069" asserts="0">
+        <results>
+          <test-suite type="Namespace" name="Test" executed="True" result="Success" success="True" time="0.069" asserts="0">
+            <results>
+              <test-suite type="TestFixture" name="DotNetEmitterTest" executed="True" result="Success" success="True" time="0.050" asserts="0">
+                <results>
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendBasicRequiresTest" executed="True" result="Success" success="True" time="0.009" asserts="0" />
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendClassEndTest" executed="True" result="Success" success="True" time="0.012" asserts="1" />
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendClassStartTest" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendInstanceComplexGetterTest" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendInstanceComplexSetterTest" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendInstancePrivateSetterTest" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendInstanceSimpleGetterTest" executed="True" result="Success" success="True" time="0.000" asserts="1" />
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendInstanceSimpleSetterTest" executed="True" result="Success" success="True" time="0.002" asserts="1" />
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendStaticSimpleGetterTest" executed="True" result="Success" success="True" time="0.001" asserts="1" />
+                  <test-case name="EdgeGenerator.Test.DotNetEmitterTest.AppendStaticSimpleSetterTest" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                </results>
+              </test-suite>
+              <test-suite type="TestFixture" name="JavaScriptEmitterTest" executed="True" result="Success" success="True" time="0.014" asserts="0">
+                <results>
+                  <test-case name="EdgeGenerator.Test.JavaScriptEmitterTest.AppendBasicRequiresTest" executed="True" result="Success" success="True" time="0.000" asserts="0" />
+                  <test-case name="EdgeGenerator.Test.JavaScriptEmitterTest.AppendFunctionWithComplexResultAndComplexArgumentTest" executed="True" result="Success" success="True" time="0.013" asserts="1" />
+                </results>
+              </test-suite>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

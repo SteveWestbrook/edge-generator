@@ -1,7 +1,7 @@
 {
   "name": "edge-generator",
   "version": "1.0.0",
-  "description": "",
+  "description": "Generates JavaScript proxies of .NET code that allow references to be passed between node.js and .NET libraries.",
   "main": "index.js",
   "bin": {
     "edge-generator": "bin/edge-generator.bin.js"

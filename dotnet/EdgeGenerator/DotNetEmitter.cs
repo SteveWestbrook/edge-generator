@@ -62,6 +62,11 @@ namespace EdgeGenerator
     }
 
     /// <summary>
+    /// Gets or sets a relative path for assemblies 
+    /// </summary>
+    public string ExecutionBasePath { get; set; }
+
+    /// <summary>
     /// Resets formatting and references for this builder.  Used to clear 
     /// generation context for a separate, unrelated block of code.
     /// </summary>
@@ -421,12 +426,25 @@ namespace EdgeGenerator
         typeof(ReferenceManager),
         "./node_modules/edge-reference/bin/");
 
-      this.AppendReferenceFor(this.source);
+      this.AppendReferenceFor(
+        this.source,
+        this.ExecutionBasePath);
 
       // Return and parameter type references
       foreach (Type referencedType in referencedTypes) 
       {
-        this.AppendReferenceFor(referencedType);
+        // See if the referenced assembly is located in a local directory
+        string basePath = null;
+        FileInfo target = new FileInfo(referencedType.Assembly.Location);
+
+        // This is going on the terrible assumption that there is no 
+        // organization to assemblies beyond being placed in a particular 
+        // directory
+        if (target.Directory.FullName.Contains(Environment.CurrentDirectory)) {
+          basePath = this.ExecutionBasePath;
+        }
+        
+        this.AppendReferenceFor(referencedType, basePath);
       }
 
       this.buffer.AppendLine();
